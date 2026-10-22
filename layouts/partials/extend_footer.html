@@ -32,11 +32,10 @@
         // 注入评论区（延迟 1 秒，确保页面已经渲染完成）
         setTimeout(function() {
             try {
-                var article = document.querySelector('article');
                 var footer = document.querySelector('footer');
                 
-                // 只在有文章内容的页面插入，且防止重复
-                if (article && footer && !document.getElementById('my-custom-giscus')) {
+                // 强制判断：只有网址里包含 /posts/ 才加载评论区，首页绝对不加载
+                if (window.location.pathname.includes('/posts/') && footer && !document.getElementById('my-custom-giscus')) {
                     var giscusDiv = document.createElement('div');
                     giscusDiv.id = 'my-custom-giscus';
                     // 强制设置宽度和毛玻璃样式
