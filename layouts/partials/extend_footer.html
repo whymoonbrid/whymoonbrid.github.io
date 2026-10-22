@@ -1,24 +1,69 @@
-<!-- 实时时钟 -->
-<div id="my-clock" style="text-align: center; font-size: 0.9em; font-weight: bold; margin-top: 20px; margin-bottom: 10px; opacity: 0.8;">
-    载入时间中...
-</div>
+<!-- 时钟 -->
+<div id="my-clock" style="text-align: center; font-size: 0.9em; font-weight: bold; margin-top: 20px; margin-bottom: 20px; opacity: 0.8;"></div>
 
 <script>
-    function updateClock() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
+    // ========== 1. 实时时钟 ==========
+    setInterval(function() {
+        document.getElementById('my-clock').innerText = new Date().toLocaleString('zh-CN', { hour12: false });
+    }, 1000);
+    document.getElementById('my-clock').innerText = new Date().toLocaleString('zh-CN', { hour12: false });
+
+    // ========== 2. 等页面加载完毕，再执行插入 ==========
+    document.addEventListener("DOMContentLoaded", function() {
         
-        // 格式：2024-05-20 14:30:00
-        const timeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        document.getElementById('my-clock').innerText = timeString;
-    }
-    
-    // 立即执行一次，然后每秒更新
-    updateClock();
-    setInterval(updateClock, 1000);
+        // 注入搜索按钮（延迟 0.5 秒）
+        setTimeout(function() {
+            try {
+                var nav = document.querySelector('.header-nav');
+                if (nav && !document.getElementById('my-search-btn')) {
+                    var btn = document.createElement('a');
+                    btn.id = 'my-search-btn';
+                    btn.href = '/search/'; // 直接跳转到我们刚建好的搜索页面
+                    btn.innerHTML = '🔍 搜索';
+                    btn.style.cssText = "margin-left: 20px; font-weight: bold; text-decoration: none; color: inherit; vertical-align: middle;";
+                    btn.onclick = function() {
+                        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }));
+                    };
+                    nav.appendChild(btn);
+                }
+            } catch (e) { console.log("搜索按钮加载失败"); }
+        }, 500);
+
+        // 注入评论区（延迟 1 秒，确保页面已经渲染完成）
+        setTimeout(function() {
+            try {
+                var article = document.querySelector('article');
+                var footer = document.querySelector('footer');
+                
+                // 只在有文章内容的页面插入，且防止重复
+                if (article && footer && !document.getElementById('my-custom-giscus')) {
+                    var giscusDiv = document.createElement('div');
+                    giscusDiv.id = 'my-custom-giscus';
+                    // 强制设置宽度和毛玻璃样式
+                    giscusDiv.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);";
+                    
+                    // 插入到 footer 之前
+                    footer.parentNode.insertBefore(giscusDiv, footer);
+
+                    var script = document.createElement('script');
+                    script.src = "https://giscus.app/client.js";
+                    script.setAttribute("data-repo", "whymoonbrid/whymoonbrid.github.io");
+                    script.setAttribute("data-repo-id", "R_kgDOVTyFwQ");
+                    script.setAttribute("data-category", "Announcements");
+                    script.setAttribute("data-category-id", "DIC_kwDOVTyFwC4DJW4G");
+                    script.setAttribute("data-mapping", "pathname");
+                    script.setAttribute("data-strict", "0");
+                    script.setAttribute("data-reactions-enabled", "1");
+                    script.setAttribute("data-emit-metadata", "0");
+                    script.setAttribute("data-input-position", "bottom");
+                    script.setAttribute("data-theme", "preferred_color_scheme");
+                    script.setAttribute("data-lang", "zh-CN");
+                    script.setAttribute("crossorigin", "anonymous");
+                    script.async = true;
+                    
+                    giscusDiv.appendChild(script);
+                }
+            } catch (e) { console.log("评论区加载失败"); }
+        }, 1000);
+    });
 </script>
