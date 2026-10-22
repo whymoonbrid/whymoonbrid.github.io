@@ -1,0 +1,24 @@
+<!-- 实时时钟 -->
+<div id="my-clock" style="text-align: center; font-size: 0.9em; font-weight: bold; margin-top: 20px; margin-bottom: 10px; opacity: 0.8;">
+    载入时间中...
+</div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        // 格式：2024-05-20 14:30:00
+        const timeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        document.getElementById('my-clock').innerText = timeString;
+    }
+    
+    // 立即执行一次，然后每秒更新
+    updateClock();
+    setInterval(updateClock, 1000);
+</script>
