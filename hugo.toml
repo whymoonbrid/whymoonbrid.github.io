@@ -1,0 +1,36 @@
+baseURL = "https://whymoonbrid.github.io/"
+languageCode = "zh-cn"
+title = "我的个人博客"
+theme = "PaperMod"
+
+[params]
+    env = "production"
+    ShowReadingTime = true
+    ShowShareButtons = true
+    ShowPostNavLinks = true
+    ShowBreadCrumbs = true
+    ShowCodeCopyButtons = true
+    ShowToc = true
+    defaultTheme = "auto"
+
+[params.homeInfoParams]
+    Title = "Hi there!"
+    Content = "欢迎来到我的博客，这里记录了我的学习与思考。"
+
+[[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/posts/"  # 注意这里，我帮你改成了直接指向文章列表，就不会 404 了
+    weight = 10
+
+[[menu.main]]
+    identifier = "categories"
+    name = "分类"
+    url = "/categories/"
+    weight = 20
+
+[[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 30
