@@ -1,0 +1,66 @@
+/* 1. 全局背景：使用本地图片，并强制覆盖主题默认颜色 */
+body {
+    background: url('/bg.png') no-repeat center center fixed !important;
+    background-size: cover !important;
+    background-color: transparent !important;
+}
+
+/* 2. 首页欢迎区域 - 浅色模式卡片 */
+.home-info {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 30px !important;
+    max-width: 700px;
+    margin: 20px auto;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 3. 文章列表卡片 - 浅色模式 */
+.main .post-entry {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin: 15px auto;
+    max-width: 700px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.main .post-entry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* 4. 导航栏透明感 */
+.nav {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(5px);
+}
+
+/* ========================================= */
+/* 5. 深色模式适配（当你点击右下角月亮时生效） */
+/* ========================================= */
+[data-theme="dark"] body {
+    /* 深色模式下背景稍微暗一点，可以保留图片也可以删掉这行用纯黑 */
+    background: url('/bg.png') no-repeat center center fixed !important;
+    background-size: cover !important;
+}
+
+[data-theme="dark"] .home-info,
+[data-theme="dark"] .main .post-entry,
+[data-theme="dark"] .nav {
+    background: rgba(20, 20, 20, 0.75) !important; /* 变成半透明深黑色 */
+    color: #eee;
+}
+
+/* 让导航栏文字和底部文字更清晰 */
+.nav a, footer {
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8); /* 浅色模式下加白边 */
+    font-weight: 600;
+}
+[data-theme="dark"] .nav a, [data-theme="dark"] footer {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); /* 深色模式下加黑边 */
+}

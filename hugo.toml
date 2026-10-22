@@ -1,5 +1,5 @@
 baseURL = "https://whymoonbrid.github.io/"
-languageCode = "zh-cn"
+locale = "zh-cn"
 title = "我的个人博客"
 theme = "PaperMod"
 
