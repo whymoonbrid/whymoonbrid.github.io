@@ -44,12 +44,19 @@ body::before {
 }
 
 /* ========================================= */
-/* 2. 导航栏透明感 */
+/* 2. 导航栏悬浮圆角化 (核心优化) */
 /* ========================================= */
 .header-nav {
-    background: rgba(255, 255, 255, 0.6) !important;
+    background: rgba(255, 255, 255, 0.75) !important;
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    /* 圆角与悬浮间距 */
+    border-radius: 12px !important;
+    margin: 10px auto 0 auto !important; 
+    max-width: 1200px !important;        
+    width: calc(100% - 40px) !important; 
+    /* 阴影增强立体感 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    transition: background 0.3s, box-shadow 0.3s;
 }
 
 /* ========================================= */
@@ -154,10 +161,17 @@ html[data-theme="dark"], html.dark { background: linear-gradient(135deg, #0f0f13
 html[data-theme="dark"] body::before, html.dark body::before { filter: brightness(0.3) grayscale(20%); }
 
 /* 卡片深色背景 */
-html[data-theme="dark"] .home-info, html[data-theme="dark"] .main .post-entry, html[data-theme="dark"] .header-nav, html[data-theme="dark"] .post-content, html[data-theme="dark"] .about-card, html[data-theme="dark"] .resources-content,
-html.dark .home-info, html.dark .main .post-entry, html.dark .header-nav, html.dark .post-content, html.dark .about-card, html.dark .resources-content {
+html[data-theme="dark"] .home-info, html[data-theme="dark"] .main .post-entry, html[data-theme="dark"] .post-content, html[data-theme="dark"] .about-card, html[data-theme="dark"] .resources-content,
+html.dark .home-info, html.dark .main .post-entry, html.dark .post-content, html.dark .about-card, html.dark .resources-content {
     background: rgba(25, 25, 25, 0.85) !important; 
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 🚨导航栏深色模式专属样式 (配合圆角悬浮) */
+html[data-theme="dark"] .header-nav,
+html.dark .header-nav {
+    background: rgba(25, 25, 25, 0.85) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* 文章详情页及所有文字夜间变白 */
@@ -227,5 +241,10 @@ html.dark .aplayer .aplayer-pic, html[data-theme="dark"] .aplayer .aplayer-pic {
     .post-content {
         padding: 20px !important;
         border-radius: 12px;
+    }
+    /* 手机端导航栏稍微调整边距，防止屏幕太窄显得拥挤 */
+    .header-nav {
+        width: calc(100% - 20px) !important;
+        margin-top: 5px !important;
     }
 }
