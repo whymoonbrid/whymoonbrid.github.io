@@ -28,9 +28,14 @@ ShowToc = false
         <strong>GitHub</strong>: 
         <a href="https://github.com/whymoonbrid" target="_blank" style="color: #0066cc !important; text-decoration: underline; font-weight: bold;">whymoonbrid</a>
     </li>
-    <li style="color: #333 !important;">
+    <li style="color: #333 !important; margin-bottom: 10px;">
         <strong>Email</strong>: 
         <a href="mailto:261105091@qq.com" target="_blank" style="color: #0066cc !important; text-decoration: underline; font-weight: bold;">261105091@qq.com</a>
+    </li>
+    <!-- 这里改成了 B 站专属粉色/蓝色，你可以自己选 -->
+    <li style="color: #333 !important;">
+        <strong>Bilibili</strong>: 
+        <a href="https://space.bilibili.com/628963749" target="_blank" style="color: #00A1D6 !important; text-decoration: underline; font-weight: bold;">杯具鸟</a>
     </li>
 </ul>
 
