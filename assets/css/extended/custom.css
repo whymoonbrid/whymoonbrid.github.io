@@ -1,22 +1,19 @@
 /* ========================================= */
-/* 0. 背景图加载过渡（底层渐变 + 图片淡入） */
+/* 0. 全局背景与基础重置 */
 /* ========================================= */
 html {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     background-attachment: fixed;
 }
-
 body {
     background-color: transparent !important;
+    /* 增加全局基础行高 */
+    line-height: 1.7; 
 }
-
 body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0; width: 100vw; height: 100vh;
     background: url('/bg.webp') no-repeat center center;
     background-size: cover;
     z-index: -1;
@@ -24,92 +21,91 @@ body::before {
     animation: bgFadeIn 0.5s ease-in-out forwards;
     pointer-events: none;
 }
-
-@keyframes bgFadeIn {
-    to { opacity: 1; }
-}
+@keyframes bgFadeIn { to { opacity: 1; } }
 
 /* ========================================= */
 /* 1. 首页欢迎卡片 & 文章列表卡片 */
 /* ========================================= */
-.home-info {
-    background: rgba(255, 255, 255, 0.7) !important;
+.home-info, .main .post-entry {
+    background: rgba(255, 255, 255, 0.75) !important;
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 30px !important;
-    max-width: 700px;
-    margin: 20px auto;
-    text-align: center;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s;
 }
-
+.home-info {
+    padding: 30px !important; max-width: 700px; margin: 20px auto; text-align: center;
+}
 .main .post-entry {
-    background: rgba(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
-    padding: 15px 20px;
-    margin: 15px auto;
-    max-width: 700px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 15px 20px; margin: 15px auto; max-width: 700px;
 }
-
 .main .post-entry:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 /* ========================================= */
-/* 2. 导航栏透明感 (修复 .nav -> .header-nav) */
+/* 2. 导航栏透明感 */
 /* ========================================= */
 .header-nav {
     background: rgba(255, 255, 255, 0.6) !important;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 /* ========================================= */
-/* 3. 通用深色模式适配 (修复根节点选择器) */
+/* 3. 🚨核心优化🚨 文章详情页（解决文字糊在背景上的问题） */
 /* ========================================= */
-html[data-theme="dark"], 
-html.dark {
-    background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%);
+.post-content {
+    background: rgba(255, 255, 255, 0.9) !important; /* 给文章加毛玻璃底板 */
+    backdrop-filter: blur(12px);
+    padding: 40px !important;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    margin-top: 20px;
+    margin-bottom: 40px;
 }
 
-html[data-theme="dark"] body::before, 
-html.dark body::before {
-    filter: brightness(0.3) grayscale(20%);
+/* 强制正文、标题颜色清晰 */
+.post-content p, 
+.post-content li, 
+.post-content h1, 
+.post-content h2, 
+.post-content h3, 
+.post-content h4,
+.post-title {
+    color: #1a1a1a !important;
 }
 
-html[data-theme="dark"] .home-info,
-html[data-theme="dark"] .main .post-entry,
-html[data-theme="dark"] .header-nav,
-html.dark .home-info,
-html.dark .main .post-entry,
-html.dark .header-nav {
-    background: rgba(20, 20, 20, 0.75) !important; 
-    color: #eee;
+/* 优化段落间距 */
+.post-content p {
+    margin-bottom: 1.2em;
+    font-size: 1.05rem;
+}
+
+/* 文章内图片居中并加圆角阴影 */
+.post-content img {
+    display: block;
+    margin: 30px auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* 引用块优化 */
+.post-content blockquote {
+    border-left: 4px solid #00adb5;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 10px 20px;
+    border-radius: 0 8px 8px 0;
+    color: #555 !important;
 }
 
 /* ========================================= */
-/* 4. 文字阴影优化（防花眼） */
+/* 4. 关于页面 & 资源分享页面专属颜色 */
 /* ========================================= */
-.header-nav a, footer {
-    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
-    font-weight: 600;
-}
-
-html[data-theme="dark"] .header-nav a, 
-html[data-theme="dark"] footer,
-html.dark .header-nav a, 
-html.dark footer {
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-}
-
-/* ========================================= */
-/* 5. 资源分享页面专属颜色 (修复深色漏掉的 li) */
-/* ========================================= */
-.resources-content, .custom-card {
-    background: rgba(255, 255, 255, 0.75);
+.about-card, .resources-content, .custom-card {
+    background: rgba(255, 255, 255, 0.85);
     padding: 30px; 
     border-radius: 16px; 
     backdrop-filter: blur(10px); 
@@ -117,169 +113,81 @@ html.dark footer {
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     color: #222 !important;
 }
-.resources-content p, 
-.resources-content h2, 
-.resources-content li, /* 修复：补上 li */
-.custom-title, 
-.custom-text {
-    color: #222 !important; 
-}
-.resources-content a {
-    color: #0066cc !important;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-html[data-theme="dark"] .resources-content,
-html[data-theme="dark"] .custom-card,
-html.dark .resources-content,
-html.dark .custom-card {
-    background: rgba(30, 30, 30, 0.85) !important;
-}
-
-html[data-theme="dark"] .resources-content p,
-html[data-theme="dark"] .resources-content h2,
-html[data-theme="dark"] .resources-content li, /* 修复：补上 li */
-html[data-theme="dark"] .custom-title,
-html[data-theme="dark"] .custom-text,
-html.dark .resources-content p,
-html.dark .resources-content h2,
-html.dark .resources-content li, /* 修复：补上 li */
-html.dark .custom-title,
-html.dark .custom-text {
-    color: #eee !important;
-}
-
-/* ========================================= */
-/* 6. 极致悬浮：时钟(右) & 访问量(左) */
-/* ========================================= */
-#my-clock, #busuanzi_container_site_pv {
-    position: fixed !important;
-    bottom: 20px !important;
-    z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.4) !important;
-    color: #fff !important;
-    padding: 6px 15px !important;
-    border-radius: 20px !important;
-    font-size: 12px !important;
-    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    backdrop-filter: blur(5px) !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
-    transition: all 0.3s ease !important;
-    opacity: 0.7 !important;
-}
-
-#my-clock:hover, #busuanzi_container_site_pv:hover {
-    opacity: 1 !important;
-    background: rgba(0, 0, 0, 0.8) !important;
-}
-
-#my-clock { right: 20px !important; }
-#busuanzi_container_site_pv { left: 20px !important; }
-
-html[data-theme="dark"] #my-clock, 
-html[data-theme="dark"] #busuanzi_container_site_pv,
-html.dark #my-clock,
-html.dark #busuanzi_container_site_pv {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* ========================================= */
-/* 7. 阅读进度条 & 打字机光标 */
-/* ========================================= */
-#reading-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 4px;
-    background: linear-gradient(to right, #00c6ff, #0072ff);
-    z-index: 9999;
-    transition: width 0.1s ease;
-    box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
-}
-
-.cursor {
-    display: inline-block;
-    width: 2px;
-    background-color: currentColor;
-    animation: blink 1s step-end infinite;
-    vertical-align: bottom;
-    margin-left: 2px;
-    font-weight: normal;
-}
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-/* ========================================= */
-/* 8. 关于页面：自适应明暗模式 */
-/* ========================================= */
-.about-card {
-    background: rgba(255, 255, 255, 0.85);
-    padding: 30px;
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    margin-top: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: background 0.3s, color 0.3s, border 0.3s;
-}
-
-.about-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.about-card h2 { color: #333 !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-.about-card .about-title { color: #333 !important; margin: 0 !important; }
+.about-card h2, .about-card .about-title, .resources-content h2, .custom-title { color: #333 !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
 .about-card .about-subtitle { color: #666 !important; margin-top: 8px; }
-.about-card p, .about-card li { color: #333 !important; }
+.about-card p, .about-card li, .resources-content p, .resources-content h2, .resources-content li, .custom-text { color: #333 !important; }
+.resources-content a { color: #0066cc !important; text-decoration: underline; font-weight: bold; }
 .about-divider { margin: 30px 0; border: none; border-top: 1px dashed #ccc; }
 .about-card a.link-github, .about-card a.link-email { color: #0066cc !important; font-weight: bold; }
 .about-card a.link-bili { color: #00A1D6 !important; font-weight: bold; }
 
-html.dark .about-card,
-html[data-theme="dark"] .about-card {
-    background: rgba(30, 30, 30, 0.85);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* ========================================= */
+/* 5. 极致悬浮：时钟(右) & 访问量(左) & 进度条 & 光标 */
+/* ========================================= */
+#my-clock, #busuanzi_container_site_pv {
+    position: fixed !important; bottom: 20px !important; z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.4) !important; color: #fff !important;
+    padding: 6px 15px !important; border-radius: 20px !important; font-size: 12px !important;
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    backdrop-filter: blur(5px) !important; box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+    transition: all 0.3s ease !important; opacity: 0.7 !important;
 }
-html.dark .about-card h2, html.dark .about-card .about-title,
-html[data-theme="dark"] .about-card h2, html[data-theme="dark"] .about-card .about-title { color: #ffffff !important; }
-html.dark .about-card .about-subtitle,
-html[data-theme="dark"] .about-card .about-subtitle { color: #aaaaaa !important; }
-html.dark .about-card p, html.dark .about-card li,
-html[data-theme="dark"] .about-card p, html[data-theme="dark"] .about-card li { color: #cccccc !important; }
-html.dark .about-divider,
-html[data-theme="dark"] .about-divider { border-top-color: #555; }
-html.dark .about-card a.link-github, html.dark .about-card a.link-email,
-html[data-theme="dark"] .about-card a.link-github, html[data-theme="dark"] .about-card a.link-email { color: #4da6ff !important; }
-html.dark .about-card a.link-bili,
-html[data-theme="dark"] .about-card a.link-bili { color: #00A1D6 !important; }
+#my-clock:hover, #busuanzi_container_site_pv:hover { opacity: 1 !important; background: rgba(0, 0, 0, 0.8) !important; }
+#my-clock { right: 20px !important; }
+#busuanzi_container_site_pv { left: 20px !important; }
 
-/* ========================================== */
-/* 9. 音乐播放器：自适应明暗模式 */
-/* ========================================== */
-#aplayer {
-    margin: 0 !important;
-    border-radius: 10px !important;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: background 0.3s;
+#reading-progress {
+    position: fixed; top: 0; left: 0; width: 0%; height: 4px;
+    background: linear-gradient(to right, #00c6ff, #0072ff); z-index: 9999;
+    transition: width 0.1s ease; box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
+}
+.cursor {
+    display: inline-block; width: 2px; background-color: currentColor;
+    animation: blink 1s step-end infinite; vertical-align: bottom; margin-left: 2px; font-weight: normal;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ========================================= */
+/* 6. 通用深色模式适配 (全覆盖) */
+/* ========================================= */
+html[data-theme="dark"], html.dark { background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%); }
+html[data-theme="dark"] body::before, html.dark body::before { filter: brightness(0.3) grayscale(20%); }
+
+/* 卡片深色背景 */
+html[data-theme="dark"] .home-info, html[data-theme="dark"] .main .post-entry, html[data-theme="dark"] .header-nav, html[data-theme="dark"] .post-content, html[data-theme="dark"] .about-card, html[data-theme="dark"] .resources-content,
+html.dark .home-info, html.dark .main .post-entry, html.dark .header-nav, html.dark .post-content, html.dark .about-card, html.dark .resources-content {
+    background: rgba(25, 25, 25, 0.85) !important; 
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* 日间模式 */
-.aplayer.aplayer { background-color: rgba(255, 255, 255, 0.9) !important; color: #333 !important; }
+/* 文章详情页及所有文字夜间变白 */
+html[data-theme="dark"] .post-content p, html[data-theme="dark"] .post-content li, html[data-theme="dark"] .post-content h1, html[data-theme="dark"] .post-content h2, html[data-theme="dark"] .post-content h3, html[data-theme="dark"] .post-title,
+html.dark .post-content p, html.dark .post-content li, html.dark .post-content h1, html.dark .post-content h2, html.dark .post-content h3, html.dark .post-title,
+html.dark .about-card h2, html.dark .about-card .about-title, html.dark .about-card p, html.dark .about-card li, html.dark .resources-content p, html.dark .resources-content h2, html.dark .resources-content li, html.dark .custom-title, html.dark .custom-text,
+html[data-theme="dark"] .about-card h2, html[data-theme="dark"] .about-card .about-title, html[data-theme="dark"] .about-card p, html[data-theme="dark"] .about-card li, html[data-theme="dark"] .resources-content p, html[data-theme="dark"] .resources-content h2, html[data-theme="dark"] .resources-content li, html[data-theme="dark"] .custom-title, html[data-theme="dark"] .custom-text {
+    color: #e5e5e5 !important;
+}
+html.dark .about-card .about-subtitle, html[data-theme="dark"] .about-card .about-subtitle { color: #aaaaaa !important; }
+html.dark .about-divider, html[data-theme="dark"] .about-divider { border-top-color: #444; }
+html.dark .about-card a.link-github, html.dark .about-card a.link-email, html[data-theme="dark"] .about-card a.link-github, html[data-theme="dark"] .about-card a.link-email { color: #4da6ff !important; }
+html.dark .about-card a.link-bili, html[data-theme="dark"] .about-card a.link-bili { color: #00A1D6 !important; }
+
+/* 代码块夜间适配 */
+html.dark .post-content blockquote, html[data-theme="dark"] .post-content blockquote { background: rgba(255, 255, 255, 0.05); color: #999 !important; }
+
+/* 导航栏和页脚夜间阴影 */
+html[data-theme="dark"] .header-nav a, html[data-theme="dark"] footer, html.dark .header-nav a, html.dark footer { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); color: #eee !important; }
+html[data-theme="dark"] #my-clock, html[data-theme="dark"] #busuanzi_container_site_pv, html.dark #my-clock, html.dark #busuanzi_container_site_pv { background: rgba(255, 255, 255, 0.15) !important; border: 1px solid rgba(255,255,255,0.1); }
+
+/* ========================================= */
+/* 7. 音乐播放器：自适应明暗模式 */
+/* ========================================= */
+#aplayer { margin: 0 !important; border-radius: 10px !important; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: background 0.3s; }
+.aplayer.aplayer { background-color: rgba(255, 255, 255, 0.95) !important; color: #333 !important; }
 .aplayer .aplayer-info { border-bottom: 1px solid #eee !important; }
 .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #333 !important; }
 .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #666 !important; }
-.aplayer .aplayer-list { background-color: rgba(255, 255, 255, 0.9) !important; }
+.aplayer .aplayer-list { background-color: rgba(255, 255, 255, 0.95) !important; }
 .aplayer .aplayer-list ol li { color: #444 !important; border-top: 1px solid #eee !important; }
 .aplayer .aplayer-list ol li:hover, .aplayer .aplayer-list ol li.aplayer-list-light { background-color: #f0f0f0 !important; color: #000 !important; }
 .aplayer .aplayer-time { color: #666 !important; }
@@ -288,57 +196,36 @@ html[data-theme="dark"] .about-card a.link-bili { color: #00A1D6 !important; }
 .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #bbb !important; }
 .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: #00adb5 !important; }
 
-/* 夜间模式 */
-html.dark .aplayer.aplayer,
-html[data-theme="dark"] .aplayer.aplayer { background-color: rgba(30, 30, 30, 0.9) !important; color: #eee !important; }
-html.dark .aplayer .aplayer-info,
-html[data-theme="dark"] .aplayer .aplayer-info { border-bottom: 1px solid #333 !important; }
-html.dark .aplayer .aplayer-info .aplayer-music .aplayer-title,
-html[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
-html.dark .aplayer .aplayer-info .aplayer-music .aplayer-author,
-html[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #aaa !important; }
-html.dark .aplayer .aplayer-list,
-html[data-theme="dark"] .aplayer .aplayer-list { background-color: rgba(30, 30, 30, 0.9) !important; }
-html.dark .aplayer .aplayer-list ol li,
-html[data-theme="dark"] .aplayer .aplayer-list ol li { color: #bbb !important; border-top: 1px solid #333 !important; }
+html.dark .aplayer.aplayer, html[data-theme="dark"] .aplayer.aplayer { background-color: rgba(30, 30, 30, 0.95) !important; color: #eee !important; }
+html.dark .aplayer .aplayer-info, html[data-theme="dark"] .aplayer .aplayer-info { border-bottom: 1px solid #333 !important; }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-title, html[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-author, html[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #aaa !important; }
+html.dark .aplayer .aplayer-list, html[data-theme="dark"] .aplayer .aplayer-list { background-color: rgba(30, 30, 30, 0.95) !important; }
+html.dark .aplayer .aplayer-list ol li, html[data-theme="dark"] .aplayer .aplayer-list ol li { color: #bbb !important; border-top: 1px solid #333 !important; }
 html.dark .aplayer .aplayer-list ol li:hover, html.dark .aplayer .aplayer-list ol li.aplayer-list-light,
 html[data-theme="dark"] .aplayer .aplayer-list ol li:hover, html[data-theme="dark"] .aplayer .aplayer-list ol li.aplayer-list-light { background-color: #333 !important; color: #fff !important; }
-html.dark .aplayer .aplayer-time,
-html[data-theme="dark"] .aplayer .aplayer-time { color: #888 !important; }
-html.dark .aplayer .aplayer-time .aplayer-icon path,
-html[data-theme="dark"] .aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
-html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar,
-html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
-html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded,
-html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
+html.dark .aplayer .aplayer-time, html[data-theme="dark"] .aplayer .aplayer-time { color: #888 !important; }
+html.dark .aplayer .aplayer-time .aplayer-icon path, html[data-theme="dark"] .aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
+html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar, html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
+html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded, html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
 
 /* 播放器封面：随日夜模式动态切换 */
-.aplayer .aplayer-pic {
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjZGRkIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNiYmIiLz48L3N2Zz4=') !important;
-}
-html.dark .aplayer .aplayer-pic,
-html[data-theme="dark"] .aplayer .aplayer-pic {
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzJjMmMyYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjNDQ0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiM2NjYiLz48L3N2Zz4=') !important;
-}
+.aplayer .aplayer-pic { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjZGRkIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNiYmIiLz48L3N2Zz4=') !important; }
+html.dark .aplayer .aplayer-pic, html[data-theme="dark"] .aplayer .aplayer-pic { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzJjMmMyYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjNDQ0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiM2NjYiLz48L3N2Zz4=') !important; }
 
 /* ========================================== */
-/* 10. 移动端适配 (解决手机端遮挡问题) */
+/* 8. 移动端适配 (解决手机端遮挡问题) */
 /* ========================================== */
 @media screen and (max-width: 768px) {
-    /* 手机端隐藏常驻时钟 */
-    #my-clock {
-        display: none !important;
-    }
-    /* 手机端隐藏悬浮音乐播放器（防止遮挡正文） */
-    #my-aplayer-box {
-        display: none !important;
-    }
-    /* 手机端把访问量稍微缩小并移到底部居中位置，或者直接隐藏 */
+    #my-clock { display: none !important; }
+    #my-aplayer-box { display: none !important; }
     #busuanzi_container_site_pv {
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        bottom: 10px !important;
-        font-size: 10px !important;
-        opacity: 0.5 !important;
+        left: 50% !important; transform: translateX(-50%) !important;
+        bottom: 10px !important; font-size: 10px !important; opacity: 0.5 !important;
+    }
+    /* 手机端文章内边距缩小 */
+    .post-content {
+        padding: 20px !important;
+        border-radius: 12px;
     }
 }
