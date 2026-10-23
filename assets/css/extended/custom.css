@@ -1,6 +1,6 @@
-/* 1. 全局背景：使用本地图片，并强制覆盖主题默认颜色 */
+/* 1. 全局背景：使用 jsDelivr CDN 加速 */
 body {
-    background: url('/bg.png') no-repeat center center fixed !important;
+    background: url('https://cdn.jsdelivr.net/gh/whymoonbrid/whymoonbrid.github.io@main/static/bg.png') no-repeat center center fixed !important;
     background-size: cover !important;
     background-color: transparent !important;
 }
@@ -44,8 +44,8 @@ body {
 /* 5. 深色模式适配（当你点击右下角月亮时生效） */
 /* ========================================= */
 [data-theme="dark"] body {
-    /* 深色模式下背景稍微暗一点，可以保留图片也可以删掉这行用纯黑 */
-    background: url('/bg.png') no-repeat center center fixed !important;
+    /* 深色模式也换成 CDN 加速 */
+    background: url('https://cdn.jsdelivr.net/gh/whymoonbrid/whymoonbrid.github.io@main/static/bg.png') no-repeat center center fixed !important;
     background-size: cover !important;
 }
 
