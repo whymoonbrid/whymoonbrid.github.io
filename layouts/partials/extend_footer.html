@@ -10,7 +10,7 @@
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 <!-- ========================================== -->
-<!-- 2. 核心 JavaScript 逻辑 -->
+<!-- 2. 核心 JavaScript 逻辑 (时钟 & 打字机) -->
 <!-- ========================================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -24,39 +24,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     updateClock();
     setInterval(updateClock, 1000);
-
-    // [功能 B] 强行注入 Giscus 评论区 (仅文章页)
-    setTimeout(function() {
-        try {
-            var footer = document.querySelector('footer');
-            if (window.location.pathname.includes('/posts/') && footer && !document.getElementById('my-custom-giscus')) {
-                var giscusDiv = document.createElement('div');
-                giscusDiv.id = 'my-custom-giscus';
-                giscusDiv.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);";
-                
-                footer.parentNode.insertBefore(giscusDiv, footer);
-
-                var script = document.createElement('script');
-                script.src = "https://giscus.app/client.js";
-                script.setAttribute("data-repo", "whymoonbrid/whymoonbrid.github.io");
-                script.setAttribute("data-repo-id", "R_kgDOVTyFwQ");
-                script.setAttribute("data-category", "General");
-                script.setAttribute("data-category-id", "DIC_kwDOVTyFwC4DJW4H");
-                script.setAttribute("data-mapping", "pathname");
-                script.setAttribute("data-strict", "0");
-                script.setAttribute("data-reactions-enabled", "1");
-                script.setAttribute("data-emit-metadata", "0");
-                script.setAttribute("data-input-position", "bottom");
-                // 👇 修改 1：根据当前博客主题决定初始化颜色
-                script.setAttribute("data-theme", document.documentElement.classList.contains('dark') ? "dark_dimmed" : "light");
-                script.setAttribute("data-lang", "zh-CN");
-                script.setAttribute("crossorigin", "anonymous");
-                script.async = true;
-                
-                giscusDiv.appendChild(script);
-            }
-        } catch (e) { console.log("评论区加载失败"); }
-    }, 1000);
 
     // [功能 C] 首页打字机效果
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
@@ -79,12 +46,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     titleIndex++;
                     setTimeout(typeWriter, 150); 
                 } else if (contentIndex < contentText.length) {
-                    titleElement.innerHTML = titleText; // 标题打完清除光标
+                    titleElement.innerHTML = titleText;
                     contentElement.innerHTML = contentText.substring(0, contentIndex + 1) + '<span class="cursor">_</span>';
                     contentIndex++;
                     setTimeout(typeWriter, 50); 
                 } else {
-                    contentElement.innerHTML = contentText; // 全部打完清除光标
+                    contentElement.innerHTML = contentText;
                 }
             }
             setTimeout(typeWriter, 500);
@@ -129,64 +96,115 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 5. 留言板专属 Giscus 注入 -->
+<!-- 5. 终极融合：Giscus 注入 & 主题完美同步 -->
 <!-- ========================================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    if (window.location.pathname.includes('/guestbook/')) {
-        var container = document.getElementById('guestbook-giscus');
-        if (container && !container.hasChildNodes()) {
+    // --- 配置区 ---
+    const giscusRepo = "whymoonbrid/whymoonbrid.github.io";
+    const giscusRepoId = "R_kgDOVTyFwQ";
+    const giscusCategory = "General";
+    const giscusCategoryId = "DIC_kwDOVTyFwC4DJW4H";
+
+    // --- 工具函数：判断当前是否为深色模式 ---
+    function isDarkMode() {
+        // 兼容 PaperMod 的 dark 类名或 data-theme 属性
+        return document.documentElement.classList.contains('dark') || 
+               document.documentElement.getAttribute('data-theme') === 'dark';
+    }
+
+    // --- 工具函数：向 Giscus 发送主题指令 ---
+    function sendThemeToGiscus(iframe) {
+        if (!iframe || !iframe.contentWindow) return;
+        const theme = isDarkMode() ? "dark_dimmed" : "light";
+        iframe.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: theme } } },
+            'https://giscus.app'
+        );
+    }
+
+    // --- 核心逻辑：注入 Giscus ---
+    function injectGiscus() {
+        let container = null;
+        let isGuestbook = false;
+
+        // 1. 判断页面类型并找到/创建容器
+        if (window.location.pathname.includes('/posts/')) {
+            // 文章页：动态创建容器并插入到 footer 之前
+            var footer = document.querySelector('footer');
+            if (footer && !document.getElementById('my-custom-giscus')) {
+                container = document.createElement('div');
+                container.id = 'my-custom-giscus';
+                // 设置初始样式
+                container.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: background-color 0.3s;";
+                footer.parentNode.insertBefore(container, footer);
+            } else {
+                container = document.getElementById('my-custom-giscus');
+            }
+        } else if (window.location.pathname.includes('/guestbook/')) {
+            // 留言板页：使用已存在的容器
+            container = document.getElementById('guestbook-giscus');
+            isGuestbook = true;
+        }
+
+        if (!container) return;
+
+        // 2. 如果是第一次加载，动态设置外框背景色
+        if (!container.hasChildNodes()) {
+            container.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
+
+            // 3. 创建并插入 Giscus script 标签
             var script = document.createElement('script');
             script.src = "https://giscus.app/client.js";
-            script.setAttribute("data-repo", "whymoonbrid/whymoonbrid.github.io");
-            script.setAttribute("data-repo-id", "R_kgDOVTyFwQ");
-            script.setAttribute("data-category", "General");
-            script.setAttribute("data-category-id", "DIC_kwDOVTyFwC4DJW4H");
+            script.setAttribute("data-repo", giscusRepo);
+            script.setAttribute("data-repo-id", giscusRepoId);
+            script.setAttribute("data-category", giscusCategory);
+            script.setAttribute("data-category-id", giscusCategoryId);
             script.setAttribute("data-mapping", "pathname");
             script.setAttribute("data-strict", "0");
             script.setAttribute("data-reactions-enabled", "1");
             script.setAttribute("data-emit-metadata", "0");
             script.setAttribute("data-input-position", "bottom");
-            // 👇 修改 2：同理，留言板初始化也根据当前主题判断
-            script.setAttribute("data-theme", document.documentElement.classList.contains('dark') ? "dark_dimmed" : "light");
+            // 初始加载时的主题
+            script.setAttribute("data-theme", isDarkMode() ? "dark_dimmed" : "light");
             script.setAttribute("data-lang", "zh-CN");
             script.setAttribute("crossorigin", "anonymous");
             script.async = true;
+            
             container.appendChild(script);
         }
     }
-});
-</script>
 
-<!-- ========================================== -->
-<!-- 6. 👇 新增：监听主题切换，实时同步 Giscus 颜色 -->
-<!-- ========================================== -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // 定义一个函数，用来向 iframe 发送修改主题的指令
-    function syncGiscusTheme() {
-        const isDark = document.documentElement.classList.contains('dark');
-        const theme = isDark ? 'dark_dimmed' : 'light';
-        
-        // 找到页面上的 Giscus iframe
-        const iframes = document.querySelectorAll('iframe.giscus-frame');
-        iframes.forEach(iframe => {
-            iframe.contentWindow.postMessage(
-                { giscus: { setConfig: { theme: theme } } },
-                'https://giscus.app'
-            );
-        });
-    }
-
-    // 监听 <html> 标签的 class 变化（PaperMod 切换深色模式时会改变这个）
+    // --- 监听主题变化 ---
+    // 1. 监听 DOM 变化 (点击切换按钮触发)
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class') {
-                syncGiscusTheme();
+            if (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme') {
+                // 更新 Giscus 外框颜色
+                var giscusDiv = document.getElementById('my-custom-giscus') || document.getElementById('guestbook-giscus');
+                if (giscusDiv) {
+                    giscusDiv.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
+                }
+                
+                // 通知 iframe 变色
+                document.querySelectorAll('iframe.giscus-frame').forEach(sendThemeToGiscus);
             }
         });
     });
-    
-    observer.observe(document.documentElement, { attributes: true });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+
+    // 2. 监听 Giscus 发送过来的消息，确保 iframe 加载完成后立刻同步主题
+    window.addEventListener('message', function (event) {
+        if (event.origin !== "https://giscus.app") return;
+        // Giscus 加载完毕或发生改变时，强制发送一次当前主题
+        if (typeof event.data === 'object' && event.data.giscus) {
+            if ('resizeHeight' in event.data.giscus || 'discussion' in event.data.giscus) {
+                document.querySelectorAll('iframe.giscus-frame').forEach(sendThemeToGiscus);
+            }
+        }
+    });
+
+    // 启动注入流程
+    injectGiscus();
 });
 </script>
