@@ -1,0 +1,31 @@
+media:
+  input: static/photos
+  output: /photos
+
+content:
+  - name: posts
+    label: 博客文章
+    path: content/posts
+    type: collection
+    fields:
+      - name: title
+        label: 标题
+        type: string
+      - name: date
+        label: 日期
+        type: date
+      - name: draft
+        label: 草稿（发布请关闭）
+        type: boolean
+        default: false
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+      - name: body
+        label: 正文内容
+        type: rich-text
