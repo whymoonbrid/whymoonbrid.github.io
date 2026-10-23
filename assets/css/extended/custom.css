@@ -25,7 +25,7 @@ body::before {
     background-size: cover;
     z-index: -1; /* 放在所有内容的最底层 */
     opacity: 0; /* 初始透明 */
-    animation: bgFadeIn 0.5s ease-in-out forwards; /* 1.5秒淡入 */
+    animation: bgFadeIn 0.5s ease-in-out forwards; /* 0.5秒淡入，更干脆 */
     pointer-events: none; /* 防止遮挡鼠标点击 */
 }
 
@@ -75,32 +75,42 @@ body::before {
 }
 
 /* ========================================= */
-/* 4. 深色模式适配（当你点击右下角月亮时生效） */
+/* 4. 深色模式适配 */
 /* ========================================= */
-/* 深色模式下，底层的渐变自动变暗，图片依然是同一张 */
+
+/* 深色模式下，底层的渐变自动变暗 */
 [data-theme="dark"] html {
     background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%);
 }
 
+/* 核心修复：夜间模式下让背景图变暗变灰 */
+[data-theme="dark"] body::before {
+    filter: brightness(0.3) grayscale(20%);
+}
+
+/* 深色模式下卡片的底色变成半透明深黑 */
 [data-theme="dark"] .home-info,
 [data-theme="dark"] .main .post-entry,
 [data-theme="dark"] .nav {
-    background: rgba(20, 20, 20, 0.75) !important; /* 变成半透明深黑色 */
+    background: rgba(20, 20, 20, 0.75) !important; 
     color: #eee;
 }
 
 /* ========================================= */
-/* 5. 文字阴影优化 */
+/* 5. 文字阴影优化（防花眼） */
 /* ========================================= */
 .nav a, footer {
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
     font-weight: 600;
 }
+
 [data-theme="dark"] .nav a, [data-theme="dark"] footer {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-/* 强制资源分享页面内部所有元素的文字颜色为深灰/黑色 */
+/* ========================================= */
+/* 6. 资源分享页面专属颜色 */
+/* ========================================= */
 .resources-content,
 .resources-content p,
 .resources-content h2,
@@ -114,4 +124,27 @@ body::before {
     color: #0066cc !important;
     text-decoration: underline;
     font-weight: bold;
+}
+
+/* ========================================= */
+/* 7. 左下角悬浮访问量统计 */
+/* ========================================= */
+#busuanzi_container_site_pv {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.4); /* 半透明黑底 */
+    color: #fff !important;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    z-index: 999;
+    backdrop-filter: blur(5px); /* 毛玻璃效果 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: opacity 0.3s ease;
+}
+
+#busuanzi_container_site_pv:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.7); /* 鼠标放上去变深 */
 }
