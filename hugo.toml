@@ -92,3 +92,9 @@ theme = "PaperMod"
     name = "关于"
     url = "/about/"
     weight = 5  # 数字设小一点，让它排在导航栏第一个！
+
+[[menu.main]]
+    identifier = "guestbook"
+    name = "留言板"
+    url = "/guestbook/"
+    weight = 15
