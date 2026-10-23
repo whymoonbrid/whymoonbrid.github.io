@@ -148,3 +148,20 @@ body::before {
     opacity: 1;
     background: rgba(0, 0, 0, 0.7); /* 鼠标放上去变深 */
 }
+
+
+/* 打字机光标闪烁特效 */
+.cursor {
+    display: inline-block;
+    width: 2px;
+    background-color: currentColor;
+    animation: blink 1s step-end infinite;
+    vertical-align: bottom;
+    margin-left: 2px;
+    font-weight: normal;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}

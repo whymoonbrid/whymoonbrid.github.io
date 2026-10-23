@@ -20,7 +20,7 @@ theme = "PaperMod"
 
 [params.homeInfoParams]
     Title = "Hi there!"
-    Content = "欢迎来到我的博客，这里记录了我的学习与思考。"
+    Content = "日常分享用，总之什么都会抛过来一点"
 
 [[menu.main]]
     identifier = "archives"

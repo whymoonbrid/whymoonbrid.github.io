@@ -55,3 +55,54 @@
     🧑‍🤝‍🧑 访客数: <span id="busuanzi_value_site_uv">-</span> 人
 </div>
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- 首页打字机效果 -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 确保只在首页执行
+    if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+        
+        // 获取首页的标题和内容元素
+        var titleElement = document.querySelector('.home-info h1');
+        var contentElement = document.querySelector('.home-info p');
+        
+        if (titleElement && contentElement) {
+            // 获取原本的文字
+            var titleText = titleElement.innerText;
+            var contentText = contentElement.innerText;
+            
+            // 清空原文字
+            titleElement.innerText = "";
+            contentElement.innerText = "";
+            
+            var titleIndex = 0;
+            var contentIndex = 0;
+            
+            // 打字机函数
+            function typeWriter() {
+                // 先打标题
+                if (titleIndex < titleText.length) {
+                    titleElement.innerHTML = titleText.substring(0, titleIndex + 1) + '<span class="cursor">_</span>';
+                    titleIndex++;
+                    setTimeout(typeWriter, 150); // 每个字间隔 150 毫秒
+                } 
+                // 标题打完后，打内容
+                else if (contentIndex < contentText.length) {
+                    contentElement.innerHTML = contentText.substring(0, contentIndex + 1) + '<span class="cursor">_</span>';
+                    contentIndex++;
+                    setTimeout(typeWriter, 50); // 内容打字快一点
+                } 
+                // 全部打完，保留光标或去掉光标
+                else {
+                    // 如果想要光标一直闪烁，保留这行；如果打完就不想要光标，可以删掉这行
+                    contentElement.innerHTML = contentText + '<span class="cursor">_</span>';
+                }
+            }
+            
+            // 延迟半秒开始打字，体验更好
+            setTimeout(typeWriter, 500);
+        }
+    }
+});
+</script>
