@@ -61,8 +61,14 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 3. 阅读进度条容器 -->
+<!-- 3. 阅读进度条 -->
 <!-- ========================================== -->
+<style>
+    #reading-progress {
+        position: fixed; top: 0; left: 0; width: 0%; height: 3px;
+        background-color: #00adb5; z-index: 99999; transition: width 0.1s;
+    }
+</style>
 <div id="reading-progress"></div>
 <script>
     window.addEventListener('scroll', function() {
@@ -85,75 +91,50 @@ document.addEventListener("DOMContentLoaded", function() {
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 <script>
     Fancybox.bind("[data-fancybox], .post-content img, .photo-gallery img", {
-        Toolbar: {
-            display: {
-                left: ["infobar"],
-                middle: [],
-                right: ["download", "zoomIn", "zoomOut", "rotate", "close"],
-            },
-        },
+        Toolbar: { display: { left: ["infobar"], middle: [], right: ["download", "zoomIn", "zoomOut", "rotate", "close"] } },
     });
 </script>
 
 <!-- ========================================== -->
-<!-- 5. 终极融合：Giscus 注入 & 主题完美同步 -->
+<!-- 5. Giscus 评论区 (完美同步深色模式) -->
 <!-- ========================================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // --- 配置区 ---
     const giscusRepo = "whymoonbrid/whymoonbrid.github.io";
     const giscusRepoId = "R_kgDOVTyFwQ";
     const giscusCategory = "General";
     const giscusCategoryId = "DIC_kwDOVTyFwC4DJW4H";
 
-    // --- 工具函数：判断当前是否为深色模式 ---
     function isDarkMode() {
-        // 兼容 PaperMod 的 dark 类名或 data-theme 属性
-        return document.documentElement.classList.contains('dark') || 
-               document.documentElement.getAttribute('data-theme') === 'dark';
+        return document.documentElement.classList.contains('dark') || document.documentElement.getAttribute('data-theme') === 'dark';
     }
 
-    // --- 工具函数：向 Giscus 发送主题指令 ---
     function sendThemeToGiscus(iframe) {
         if (!iframe || !iframe.contentWindow) return;
         const theme = isDarkMode() ? "dark_dimmed" : "light";
-        iframe.contentWindow.postMessage(
-            { giscus: { setConfig: { theme: theme } } },
-            'https://giscus.app'
-        );
+        iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, 'https://giscus.app');
     }
 
-    // --- 核心逻辑：注入 Giscus ---
     function injectGiscus() {
         let container = null;
-        let isGuestbook = false;
-
-        // 1. 判断页面类型并找到/创建容器
         if (window.location.pathname.includes('/posts/')) {
-            // 文章页：动态创建容器并插入到 footer 之前
             var footer = document.querySelector('footer');
             if (footer && !document.getElementById('my-custom-giscus')) {
                 container = document.createElement('div');
                 container.id = 'my-custom-giscus';
-                // 设置初始样式
                 container.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: background-color 0.3s;";
                 footer.parentNode.insertBefore(container, footer);
             } else {
                 container = document.getElementById('my-custom-giscus');
             }
         } else if (window.location.pathname.includes('/guestbook/')) {
-            // 留言板页：使用已存在的容器
             container = document.getElementById('guestbook-giscus');
-            isGuestbook = true;
         }
 
         if (!container) return;
 
-        // 2. 如果是第一次加载，动态设置外框背景色
         if (!container.hasChildNodes()) {
             container.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
-
-            // 3. 创建并插入 Giscus script 标签
             var script = document.createElement('script');
             script.src = "https://giscus.app/client.js";
             script.setAttribute("data-repo", giscusRepo);
@@ -161,43 +142,33 @@ document.addEventListener("DOMContentLoaded", function() {
             script.setAttribute("data-category", giscusCategory);
             script.setAttribute("data-category-id", giscusCategoryId);
             script.setAttribute("data-mapping", "pathname");
-            // 👇 核心修改：将 "1" 改成了 "0"，关闭严格模式
             script.setAttribute("data-strict", "0");
             script.setAttribute("data-reactions-enabled", "1");
             script.setAttribute("data-emit-metadata", "0");
             script.setAttribute("data-input-position", "bottom");
-            // 初始加载时的主题
             script.setAttribute("data-theme", isDarkMode() ? "dark_dimmed" : "light");
             script.setAttribute("data-lang", "zh-CN");
             script.setAttribute("crossorigin", "anonymous");
             script.async = true;
-            
             container.appendChild(script);
         }
     }
 
-    // --- 监听主题变化 ---
-    // 1. 监听 DOM 变化 (点击切换按钮触发)
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme') {
-                // 更新 Giscus 外框颜色
                 var giscusDiv = document.getElementById('my-custom-giscus') || document.getElementById('guestbook-giscus');
                 if (giscusDiv) {
                     giscusDiv.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
                 }
-                
-                // 通知 iframe 变色
                 document.querySelectorAll('iframe.giscus-frame').forEach(sendThemeToGiscus);
             }
         });
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
 
-    // 2. 监听 Giscus 发送过来的消息，确保 iframe 加载完成后立刻同步主题
     window.addEventListener('message', function (event) {
         if (event.origin !== "https://giscus.app") return;
-        // Giscus 加载完毕或发生改变时，强制发送一次当前主题
         if (typeof event.data === 'object' && event.data.giscus) {
             if ('resizeHeight' in event.data.giscus || 'discussion' in event.data.giscus) {
                 document.querySelectorAll('iframe.giscus-frame').forEach(sendThemeToGiscus);
@@ -205,7 +176,91 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 启动注入流程
     injectGiscus();
+});
+</script>
+
+<!-- ========================================== -->
+<!-- 6. 悬浮背景音乐播放器 (暗色版 + 内置封面) -->
+<!-- ========================================== -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<div id="my-aplayer-box" style="position: fixed; bottom: 80px; right: 20px; z-index: 999999; width: 300px; max-width: calc(100vw - 40px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); border-radius: 10px; overflow: hidden; border: 1px solid #333;">
+    <div id="aplayer"></div>
+</div>
+
+<style>
+    /* 强制把播放器外壳和列表变成暗色 */
+    #aplayer {
+        margin: 0 !important;
+    }
+    #aplayer.aplayer {
+        background-color: #1e1e1e !important; 
+        color: #e0e0e0 !important; 
+    }
+    #aplayer .aplayer-info {
+        border-bottom: 1px solid #333 !important;
+    }
+    #aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
+    #aplayer .aplayer-info .aplayer-music .aplayer-author { color: #aaa !important; }
+    #aplayer .aplayer-list {
+        background-color: #1e1e1e !important;
+    }
+    #aplayer .aplayer-list ol li {
+        color: #bbb !important;
+        border-top: 1px solid #333 !important;
+    }
+    #aplayer .aplayer-list ol li:hover,
+    #aplayer .aplayer-list ol li.aplayer-list-light {
+        background-color: #333 !important;
+        color: #fff !important;
+    }
+    #aplayer .aplayer-time { color: #888 !important; }
+    #aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
+    #aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
+    #aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
+    #aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: #00adb5 !important; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Base64 内置暗色黑胶封面，绝对不失效
+    const defaultCover = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzJjMmMyYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjNDQ0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiM2NjYiLz48L3N2Zz4=';
+
+    const ap = new APlayer({
+        container: document.getElementById('aplayer'),
+        autoplay: false,
+        theme: '#00adb5', 
+        loop: 'all',
+        order: 'list', 
+        volume: 0.5,
+        audio: [
+            { 
+                name: '江河日上', 
+                artist: 'Fayzz', 
+                url: '/music/Fayzz - 江河日上.mp3',
+                cover: defaultCover 
+            },
+            { 
+                name: 'When It Rains', 
+                artist: 'KIAH', 
+                url: '/music/KIAH - When It Rains.mp3',
+                cover: defaultCover 
+            },
+            { 
+                name: 'Shades', 
+                artist: '顾忠山', 
+                url: '/music/顾忠山 - Shades.mp3',
+                cover: defaultCover 
+            },
+            { 
+                name: 'Welcome To Va-11 Hall-A', 
+                artist: 'Garoad', 
+                url: '/music/Garoad - Welcome To Va-11 Hall-A.mp3',
+                cover: defaultCover 
+            }
+        ]
+    });
 });
 </script>
