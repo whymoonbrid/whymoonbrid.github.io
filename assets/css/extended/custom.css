@@ -199,3 +199,33 @@ body::before {
     box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
 }
 
+
+/* ========================================= */
+/* 留言板/资源页 通用毛玻璃卡片 */
+/* ========================================= */
+.custom-card, .resources-content {
+    background: rgba(255, 255, 255, 0.75); /* 浅色模式下稍微透一点 */
+    padding: 30px; 
+    border-radius: 16px; 
+    backdrop-filter: blur(10px); 
+    margin-top: 20px; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    color: #333 !important;
+}
+
+.custom-title, .custom-text {
+    color: #333 !important;
+}
+
+/* 深色模式下的卡片和文字 */
+[data-theme="dark"] .custom-card,
+[data-theme="dark"] .resources-content {
+    background: rgba(30, 30, 30, 0.85); /* 深色模式下变成半透明黑 */
+    color: #eee !important;
+}
+
+[data-theme="dark"] .custom-title,
+[data-theme="dark"] .custom-text,
+[data-theme="dark"] .resources-content * {
+    color: #eee !important;
+}
