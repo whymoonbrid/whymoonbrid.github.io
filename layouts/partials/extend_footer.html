@@ -11,27 +11,6 @@
     // ========== 2. 等页面加载完毕，再执行插入 ==========
     document.addEventListener("DOMContentLoaded", function() {
         
-     // 注入搜索按钮（融入原生菜单）
-        setTimeout(function() {
-            try {
-                var navUl = document.querySelector('.header-nav ul');
-                if (navUl && !document.getElementById('my-search-btn')) {
-                    var li = document.createElement('li');
-                    li.id = 'my-search-btn';
-                    // 样式和原生菜单保持一致
-                    li.style.cssText = "margin-left: 15px; display: inline-flex; align-items: center;";
-                    
-                    var a = document.createElement('a');
-                    a.href = '/search/';
-                    a.innerHTML = '🔍 搜索';
-                    a.style.cssText = "font-weight: bold; text-decoration: none; color: inherit;";
-                    
-                    li.appendChild(a);
-                    navUl.appendChild(li); // 插入到 ul 列表里
-                }
-            } catch (e) { }
-        }, 500);
-
         // 注入评论区（延迟 1 秒，确保页面已经渲染完成）
         setTimeout(function() {
             try {
