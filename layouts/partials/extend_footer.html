@@ -148,3 +148,33 @@ document.addEventListener("DOMContentLoaded", function() {
         },
     });
 </script>
+
+
+<!-- 留言板专属 Giscus 注入 -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 只有当访问的页面是 /guestbook/ 时才执行
+    if (window.location.pathname.includes('/guestbook/')) {
+        var container = document.getElementById('guestbook-giscus');
+        if (container && !container.hasChildNodes()) {
+            var script = document.createElement('script');
+            script.src = "https://giscus.app/client.js";
+            script.setAttribute("data-repo", "whymoonbrid/whymoonbrid.github.io");
+            script.setAttribute("data-repo-id", "R_kgDOVTyFwQ");
+            script.setAttribute("data-category", "General");
+            script.setAttribute("data-category-id", "DIC_kwDOVTyFwC4DJW4H");
+            script.setAttribute("data-mapping", "pathname");
+            script.setAttribute("data-strict", "0");
+            script.setAttribute("data-reactions-enabled", "1");
+            script.setAttribute("data-emit-metadata", "0");
+            script.setAttribute("data-input-position", "bottom");
+            script.setAttribute("data-theme", "preferred_color_scheme");
+            script.setAttribute("data-lang", "zh-CN");
+            script.setAttribute("crossorigin", "anonymous");
+            script.async = true;
+            container.appendChild(script);
+        }
+    }
+});
+</script>
+
