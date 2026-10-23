@@ -1,15 +1,22 @@
-/* ========================================= */
-/* 0. 全局背景与基础重置 */
-/* ========================================= */
+/* ========================================== */
+/* 🎨 Hugo 博客终极自定义样式表 (Custom CSS) */
+/* 包含：全局背景、卡片布局、日夜模式、悬浮组件、播放器 */
+/* ========================================== */
+
+/* ========================================== */
+/* 1. 全局与基础背景 */
+/* ========================================== */
 html {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     background-attachment: fixed;
 }
+
 body {
     background-color: transparent !important;
-    /* 增加全局基础行高 */
-    line-height: 1.7; 
+    line-height: 1.75; /* 提升阅读体验的全局行高 */
+    -webkit-font-smoothing: antialiased; /* 字体抗锯齿 */
 }
+
 body::before {
     content: "";
     position: fixed;
@@ -18,198 +25,182 @@ body::before {
     background-size: cover;
     z-index: -1;
     opacity: 0;
-    animation: bgFadeIn 0.5s ease-in-out forwards;
+    animation: bgFadeIn 0.8s ease-in-out forwards;
     pointer-events: none;
 }
 @keyframes bgFadeIn { to { opacity: 1; } }
 
-/* ========================================= */
-/* 1. 首页欢迎卡片 & 文章列表卡片 */
-/* ========================================= */
-.home-info, .main .post-entry {
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s;
-}
-.home-info {
-    padding: 30px !important; max-width: 700px; margin: 20px auto; text-align: center;
-}
-.main .post-entry {
-    padding: 15px 20px; margin: 15px auto; max-width: 700px;
-}
-.main .post-entry:hover {
-    transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
+/* 自定义滚动条 (美观度提升) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.5); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(150, 150, 150, 0.8); }
 
-/* ========================================= */
-/* 2. 导航栏悬浮圆角化 (核心优化) */
-/* ========================================= */
+
+/* ========================================== */
+/* 2. 导航栏 (悬浮圆角玻璃效果) */
+/* ========================================== */
 .header-nav {
     background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(10px);
-    /* 圆角与悬浮间距 */
-    border-radius: 12px !important;
-    margin: 10px auto 0 auto !important; 
-    max-width: 1200px !important;        
-    width: calc(100% - 40px) !important; 
-    /* 阴影增强立体感 */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-    transition: background 0.3s, box-shadow 0.3s;
-}
-
-/* ========================================= */
-/* 3. 🚨核心优化🚨 文章详情页（解决文字糊在背景上的问题） */
-/* ========================================= */
-.post-content {
-    background: rgba(255, 255, 255, 0.9) !important; /* 给文章加毛玻璃底板 */
     backdrop-filter: blur(12px);
-    padding: 40px !important;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    margin-top: 20px;
-    margin-bottom: 40px;
+    border-radius: 12px !important;
+    margin: 12px auto 0 auto !important; 
+    max-width: 1100px !important;        
+    width: calc(100% - 40px) !important; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* 强制正文、标题颜色清晰 */
+
+/* ========================================== */
+/* 3. 通用卡片样式 (首页、文章列表、关于、资源、留言板) */
+/* ========================================== */
+.home-info, 
+.main .post-entry, 
+.post-content, 
+.about-card, 
+.resources-content, 
+.custom-card {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease;
+}
+
+.home-info { padding: 30px !important; max-width: 700px; margin: 30px auto; text-align: center; }
+.main .post-entry { padding: 20px 25px; margin: 15px auto; max-width: 700px; }
+.main .post-entry:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15); }
+
+/* 关于页 & 资源页 & 留言板特有间距 */
+.post-content { padding: 40px !important; margin-top: 25px; margin-bottom: 40px; }
+.about-card, .resources-content, .custom-card { padding: 30px; margin-top: 25px; }
+
+
+/* ========================================== */
+/* 4. 文章详情页排版优化 (核心阅读区) */
+/* ========================================== */
 .post-content p, 
 .post-content li, 
 .post-content h1, 
 .post-content h2, 
 .post-content h3, 
 .post-content h4,
-.post-title {
-    color: #1a1a1a !important;
-}
+.post-title { color: #1a1a1a !important; }
 
-/* 优化段落间距 */
-.post-content p {
-    margin-bottom: 1.2em;
-    font-size: 1.05rem;
-}
+.post-content p { margin-bottom: 1.4em; font-size: 1.05rem; }
 
-/* 文章内图片居中并加圆角阴影 */
+/* 文章图片美观处理 */
 .post-content img {
     display: block;
-    margin: 30px auto;
+    margin: 35px auto;
     max-width: 100%;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-/* 引用块优化 */
+/* 引用块 */
 .post-content blockquote {
     border-left: 4px solid #00adb5;
-    background: rgba(0, 0, 0, 0.03);
-    padding: 10px 20px;
-    border-radius: 0 8px 8px 0;
-    color: #555 !important;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 15px 25px;
+    border-radius: 0 12px 12px 0;
+    color: #444 !important;
+    margin: 20px 0;
+    font-style: italic;
 }
 
-/* ========================================= */
-/* 4. 关于页面 & 资源分享页面专属颜色 */
-/* ========================================= */
-.about-card, .resources-content, .custom-card {
-    background: rgba(255, 255, 255, 0.85);
-    padding: 30px; 
-    border-radius: 16px; 
-    backdrop-filter: blur(10px); 
-    margin-top: 20px; 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    color: #222 !important;
+/* 行内代码块 */
+.post-content code {
+    background: rgba(0, 0, 0, 0.06) !important;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #d63384 !important;
 }
-.about-card h2, .about-card .about-title, .resources-content h2, .custom-title { color: #333 !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-.about-card .about-subtitle { color: #666 !important; margin-top: 8px; }
-.about-card p, .about-card li, .resources-content p, .resources-content h2, .resources-content li, .custom-text { color: #333 !important; }
-.resources-content a { color: #0066cc !important; text-decoration: underline; font-weight: bold; }
-.about-divider { margin: 30px 0; border: none; border-top: 1px dashed #ccc; }
-.about-card a.link-github, .about-card a.link-email { color: #0066cc !important; font-weight: bold; }
-.about-card a.link-bili { color: #00A1D6 !important; font-weight: bold; }
 
-/* ========================================= */
-/* 5. 极致悬浮：时钟(右) & 访问量(左) & 进度条 & 光标 */
-/* ========================================= */
+
+/* ========================================== */
+/* 5. 悬浮组件 (时钟、访问量、进度条、打字机光标) */
+/* ========================================== */
 #my-clock, #busuanzi_container_site_pv {
     position: fixed !important; bottom: 20px !important; z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.4) !important; color: #fff !important;
-    padding: 6px 15px !important; border-radius: 20px !important; font-size: 12px !important;
-    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    backdrop-filter: blur(5px) !important; box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
-    transition: all 0.3s ease !important; opacity: 0.7 !important;
+    background: rgba(0, 0, 0, 0.45) !important; color: #fff !important;
+    padding: 6px 16px !important; border-radius: 20px !important; font-size: 12px !important;
+    font-family: "SF Pro Display", -apple-system, sans-serif;
+    backdrop-filter: blur(8px) !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    transition: all 0.3s ease !important; opacity: 0.8 !important;
 }
-#my-clock:hover, #busuanzi_container_site_pv:hover { opacity: 1 !important; background: rgba(0, 0, 0, 0.8) !important; }
+#my-clock:hover, #busuanzi_container_site_pv:hover { opacity: 1 !important; background: rgba(0, 0, 0, 0.85) !important; transform: translateY(-2px); }
 #my-clock { right: 20px !important; }
 #busuanzi_container_site_pv { left: 20px !important; }
 
 #reading-progress {
     position: fixed; top: 0; left: 0; width: 0%; height: 4px;
     background: linear-gradient(to right, #00c6ff, #0072ff); z-index: 9999;
-    transition: width 0.1s ease; box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
+    transition: width 0.1s ease; box-shadow: 0 2px 8px rgba(0, 114, 255, 0.5);
 }
+
 .cursor {
     display: inline-block; width: 2px; background-color: currentColor;
     animation: blink 1s step-end infinite; vertical-align: bottom; margin-left: 2px; font-weight: normal;
 }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-/* ========================================= */
-/* 6. 通用深色模式适配 (全覆盖) */
-/* ========================================= */
-html[data-theme="dark"], html.dark { background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%); }
+
+/* ========================================== */
+/* 6. 音乐播放器 (基础样式，日夜颜色在下方控制) */
+/* ========================================== */
+#aplayer { margin: 0 !important; border-radius: 12px !important; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.25); transition: background 0.4s; }
+.aplayer .aplayer-info { transition: border-color 0.4s; }
+.aplayer .aplayer-list ol li { transition: background-color 0.2s, color 0.2s; }
+
+
+/* ========================================== */
+/* 🌙 7. 集中深色模式适配 (Dark Mode Overrides) */
+/* ========================================== */
+html[data-theme="dark"], html.dark { background: linear-gradient(135deg, #0b0b0e 0%, #121216 50%, #08080a 100%); }
 html[data-theme="dark"] body::before, html.dark body::before { filter: brightness(0.3) grayscale(20%); }
 
-/* 卡片深色背景 */
-html[data-theme="dark"] .home-info, html[data-theme="dark"] .main .post-entry, html[data-theme="dark"] .post-content, html[data-theme="dark"] .about-card, html[data-theme="dark"] .resources-content,
-html.dark .home-info, html.dark .main .post-entry, html.dark .post-content, html.dark .about-card, html.dark .resources-content {
-    background: rgba(25, 25, 25, 0.85) !important; 
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-}
-
-/* 🚨导航栏深色模式专属样式 (配合圆角悬浮) */
-html[data-theme="dark"] .header-nav,
-html.dark .header-nav {
+/* 导航栏夜间 */
+html[data-theme="dark"] .header-nav, html.dark .header-nav {
     background: rgba(25, 25, 25, 0.85) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* 文章详情页及所有文字夜间变白 */
+/* 卡片夜间背景 */
+html[data-theme="dark"] .home-info, html[data-theme="dark"] .main .post-entry, html[data-theme="dark"] .post-content, html[data-theme="dark"] .about-card, html[data-theme="dark"] .resources-content, html[data-theme="dark"] .custom-card,
+html.dark .home-info, html.dark .main .post-entry, html.dark .post-content, html.dark .about-card, html.dark .resources-content, html.dark .custom-card {
+    background: rgba(25, 25, 25, 0.85) !important; 
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* 文字夜间变白 */
 html[data-theme="dark"] .post-content p, html[data-theme="dark"] .post-content li, html[data-theme="dark"] .post-content h1, html[data-theme="dark"] .post-content h2, html[data-theme="dark"] .post-content h3, html[data-theme="dark"] .post-title,
 html.dark .post-content p, html.dark .post-content li, html.dark .post-content h1, html.dark .post-content h2, html.dark .post-content h3, html.dark .post-title,
-html.dark .about-card h2, html.dark .about-card .about-title, html.dark .about-card p, html.dark .about-card li, html.dark .resources-content p, html.dark .resources-content h2, html.dark .resources-content li, html.dark .custom-title, html.dark .custom-text,
-html[data-theme="dark"] .about-card h2, html[data-theme="dark"] .about-card .about-title, html[data-theme="dark"] .about-card p, html[data-theme="dark"] .about-card li, html[data-theme="dark"] .resources-content p, html[data-theme="dark"] .resources-content h2, html[data-theme="dark"] .resources-content li, html[data-theme="dark"] .custom-title, html[data-theme="dark"] .custom-text {
+html.dark .about-card h2, html.dark .about-card .about-title, html.dark .about-card p, html.dark .about-card li, 
+html.dark .resources-content p, html.dark .resources-content h2, html.dark .resources-content li, 
+html.dark .custom-title, html.dark .custom-text,
+html[data-theme="dark"] .about-card h2, html[data-theme="dark"] .about-card .about-title, html[data-theme="dark"] .about-card p, html[data-theme="dark"] .about-card li, 
+html[data-theme="dark"] .resources-content p, html[data-theme="dark"] .resources-content h2, html[data-theme="dark"] .resources-content li, 
+html[data-theme="dark"] .custom-title, html[data-theme="dark"] .custom-text {
     color: #e5e5e5 !important;
 }
+
+/* 细节微调夜间 */
 html.dark .about-card .about-subtitle, html[data-theme="dark"] .about-card .about-subtitle { color: #aaaaaa !important; }
 html.dark .about-divider, html[data-theme="dark"] .about-divider { border-top-color: #444; }
 html.dark .about-card a.link-github, html.dark .about-card a.link-email, html[data-theme="dark"] .about-card a.link-github, html[data-theme="dark"] .about-card a.link-email { color: #4da6ff !important; }
 html.dark .about-card a.link-bili, html[data-theme="dark"] .about-card a.link-bili { color: #00A1D6 !important; }
-
-/* 代码块夜间适配 */
-html.dark .post-content blockquote, html[data-theme="dark"] .post-content blockquote { background: rgba(255, 255, 255, 0.05); color: #999 !important; }
-
-/* 导航栏和页脚夜间阴影 */
+html.dark .post-content blockquote, html[data-theme="dark"] .post-content blockquote { background: rgba(255, 255, 255, 0.05); color: #ccc !important; }
+html.dark .post-content code, html[data-theme="dark"] .post-content code { background: rgba(255, 255, 255, 0.1) !important; color: #f48fb1 !important; }
 html[data-theme="dark"] .header-nav a, html[data-theme="dark"] footer, html.dark .header-nav a, html.dark footer { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); color: #eee !important; }
-html[data-theme="dark"] #my-clock, html[data-theme="dark"] #busuanzi_container_site_pv, html.dark #my-clock, html.dark #busuanzi_container_site_pv { background: rgba(255, 255, 255, 0.15) !important; border: 1px solid rgba(255,255,255,0.1); }
 
-/* ========================================= */
-/* 7. 音乐播放器：自适应明暗模式 */
-/* ========================================= */
-#aplayer { margin: 0 !important; border-radius: 10px !important; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: background 0.3s; }
-.aplayer.aplayer { background-color: rgba(255, 255, 255, 0.95) !important; color: #333 !important; }
-.aplayer .aplayer-info { border-bottom: 1px solid #eee !important; }
-.aplayer .aplayer-info .aplayer-music .aplayer-title { color: #333 !important; }
-.aplayer .aplayer-info .aplayer-music .aplayer-author { color: #666 !important; }
-.aplayer .aplayer-list { background-color: rgba(255, 255, 255, 0.95) !important; }
-.aplayer .aplayer-list ol li { color: #444 !important; border-top: 1px solid #eee !important; }
-.aplayer .aplayer-list ol li:hover, .aplayer .aplayer-list ol li.aplayer-list-light { background-color: #f0f0f0 !important; color: #000 !important; }
-.aplayer .aplayer-time { color: #666 !important; }
-.aplayer .aplayer-time .aplayer-icon path { fill: #666 !important; }
-.aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #ddd !important; }
-.aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #bbb !important; }
-.aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: #00adb5 !important; }
+/* 悬浮组件夜间 */
+html[data-theme="dark"] #my-clock, html[data-theme="dark"] #busuanzi_container_site_pv, html.dark #my-clock, html.dark #busuanzi_container_site_pv { background: rgba(255, 255, 255, 0.15) !important; border: 1px solid rgba(255,255,255,0.1); color: #fff !important; }
 
+/* 音乐播放器夜间 */
 html.dark .aplayer.aplayer, html[data-theme="dark"] .aplayer.aplayer { background-color: rgba(30, 30, 30, 0.95) !important; color: #eee !important; }
 html.dark .aplayer .aplayer-info, html[data-theme="dark"] .aplayer .aplayer-info { border-bottom: 1px solid #333 !important; }
 html.dark .aplayer .aplayer-info .aplayer-music .aplayer-title, html[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
@@ -222,29 +213,25 @@ html.dark .aplayer .aplayer-time, html[data-theme="dark"] .aplayer .aplayer-time
 html.dark .aplayer .aplayer-time .aplayer-icon path, html[data-theme="dark"] .aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
 html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar, html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
 html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded, html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
-
-/* 播放器封面：随日夜模式动态切换 */
-.aplayer .aplayer-pic { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjZGRkIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNiYmIiLz48L3N2Zz4=') !important; }
 html.dark .aplayer .aplayer-pic, html[data-theme="dark"] .aplayer .aplayer-pic { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzJjMmMyYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjNDQ0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiM2NjYiLz48L3N2Zz4=') !important; }
 
+
 /* ========================================== */
-/* 8. 移动端适配 (解决手机端遮挡问题) */
+/* 📱 8. 移动端极致适配 (解决手机端遮挡) */
 /* ========================================== */
 @media screen and (max-width: 768px) {
+    /* 隐藏常驻时钟 */
     #my-clock { display: none !important; }
+    /* 隐藏悬浮播放器 */
     #my-aplayer-box { display: none !important; }
+    /* 访问量居中并缩小 */
     #busuanzi_container_site_pv {
         left: 50% !important; transform: translateX(-50%) !important;
-        bottom: 10px !important; font-size: 10px !important; opacity: 0.5 !important;
+        bottom: 15px !important; font-size: 11px !important; opacity: 0.6 !important;
     }
-    /* 手机端文章内边距缩小 */
-    .post-content {
-        padding: 20px !important;
-        border-radius: 12px;
-    }
-    /* 手机端导航栏稍微调整边距，防止屏幕太窄显得拥挤 */
-    .header-nav {
-        width: calc(100% - 20px) !important;
-        margin-top: 5px !important;
-    }
+    
+    /* 缩小文章卡片和导航栏的内边距，让屏幕显示更多内容 */
+    .post-content { padding: 20px !important; border-radius: 12px; }
+    .header-nav { width: calc(100% - 20px) !important; margin-top: 8px !important; border-radius: 10px !important; }
+    .home-info, .main .post-entry, .about-card, .resources-content, .custom-card { padding: 20px !important; }
 }
