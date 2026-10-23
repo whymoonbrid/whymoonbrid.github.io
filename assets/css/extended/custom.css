@@ -71,7 +71,7 @@ body::before {
 }
 
 /* ========================================= */
-/* 4. 深色模式适配（通用） */
+/* 4. 通用深色模式适配 */
 /* ========================================= */
 [data-theme="dark"] html, .dark html {
     background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%);
@@ -213,8 +213,6 @@ body::before {
 /* ========================================= */
 /* 10. 关于页面：自适应明暗模式的毛玻璃卡片 */
 /* ========================================= */
-
-/* 日间模式（默认） */
 .about-card {
     background: rgba(255, 255, 255, 0.85);
     padding: 30px;
@@ -266,7 +264,6 @@ body::before {
     font-weight: bold;
 }
 
-/* 夜间模式（同时兼容 .dark 和 [data-theme="dark"]） */
 .dark .about-card,
 [data-theme="dark"] .about-card {
     background: rgba(30, 30, 30, 0.85);
@@ -305,4 +302,77 @@ body::before {
 .dark .about-card a.link-bili,
 [data-theme="dark"] .about-card a.link-bili {
     color: #00A1D6 !important;
+}
+
+/* ========================================== */
+/* 11. 音乐播放器：自适应明暗模式 */
+/* ========================================== */
+#aplayer {
+    margin: 0 !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s;
+}
+
+/* 播放器日间模式 */
+.aplayer.aplayer {
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    color: #333 !important;
+}
+.aplayer .aplayer-info { border-bottom: 1px solid #eee !important; }
+.aplayer .aplayer-info .aplayer-music .aplayer-title { color: #333 !important; }
+.aplayer .aplayer-info .aplayer-music .aplayer-author { color: #666 !important; }
+.aplayer .aplayer-list { background-color: rgba(255, 255, 255, 0.9) !important; }
+.aplayer .aplayer-list ol li { color: #444 !important; border-top: 1px solid #eee !important; }
+.aplayer .aplayer-list ol li:hover,
+.aplayer .aplayer-list ol li.aplayer-list-light { background-color: #f0f0f0 !important; color: #000 !important; }
+.aplayer .aplayer-time { color: #666 !important; }
+.aplayer .aplayer-time .aplayer-icon path { fill: #666 !important; }
+.aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #ddd !important; }
+.aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #bbb !important; }
+.aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: #00adb5 !important; }
+
+/* 播放器夜间模式 */
+.dark .aplayer.aplayer,
+[data-theme="dark"] .aplayer.aplayer {
+    background-color: rgba(30, 30, 30, 0.9) !important; 
+    color: #eee !important;
+}
+.dark .aplayer .aplayer-info,
+[data-theme="dark"] .aplayer .aplayer-info { border-bottom: 1px solid #333 !important; }
+.dark .aplayer .aplayer-info .aplayer-music .aplayer-title,
+[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
+.dark .aplayer .aplayer-info .aplayer-music .aplayer-author,
+[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #aaa !important; }
+.dark .aplayer .aplayer-list,
+[data-theme="dark"] .aplayer .aplayer-list { background-color: rgba(30, 30, 30, 0.9) !important; }
+.dark .aplayer .aplayer-list ol li,
+[data-theme="dark"] .aplayer .aplayer-list ol li { color: #bbb !important; border-top: 1px solid #333 !important; }
+.dark .aplayer .aplayer-list ol li:hover,
+.dark .aplayer .aplayer-list ol li.aplayer-list-light,
+[data-theme="dark"] .aplayer .aplayer-list ol li:hover,
+[data-theme="dark"] .aplayer .aplayer-list ol li.aplayer-list-light { background-color: #333 !important; color: #fff !important; }
+.dark .aplayer .aplayer-time,
+[data-theme="dark"] .aplayer .aplayer-time { color: #888 !important; }
+.dark .aplayer .aplayer-time .aplayer-icon path,
+[data-theme="dark"] .aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
+.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar,
+[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
+.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded,
+[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
+
+/* ========================================== */
+/* 12. 播放器封面：随日夜模式动态切换 */
+/* ========================================== */
+
+/* 日间模式：浅灰白黑胶封面 */
+.aplayer .aplayer-pic {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjZGRkIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNiYmIiLz48L3N2Zz4=') !important;
+}
+
+/* 夜间模式：深灰黑黑胶封面 */
+.dark .aplayer .aplayer-pic,
+[data-theme="dark"] .aplayer .aplayer-pic {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzJjMmMyYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjNDQ0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiM2NjYiLz48L3N2Zz4=') !important;
 }

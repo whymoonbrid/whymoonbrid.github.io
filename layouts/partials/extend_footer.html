@@ -61,14 +61,8 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 3. 阅读进度条 -->
+<!-- 3. 阅读进度条容器 -->
 <!-- ========================================== -->
-<style>
-    #reading-progress {
-        position: fixed; top: 0; left: 0; width: 0%; height: 3px;
-        background-color: #00adb5; z-index: 99999; transition: width 0.1s;
-    }
-</style>
 <div id="reading-progress"></div>
 <script>
     window.addEventListener('scroll', function() {
@@ -96,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 5. Giscus 评论区 (完美同步深色模式) -->
+<!-- 5. Giscus 评论区 -->
 <!-- ========================================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -181,53 +175,18 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 6. 悬浮背景音乐播放器 (暗色版 + 内置封面) -->
+<!-- 6. 悬浮背景音乐播放器 -->
 <!-- ========================================== -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-<div id="my-aplayer-box" style="position: fixed; bottom: 80px; right: 20px; z-index: 999999; width: 300px; max-width: calc(100vw - 40px); box-shadow: 0 4px 15px rgba(0,0,0,0.6); border-radius: 10px; overflow: hidden; border: 1px solid #333;">
+<div id="my-aplayer-box" style="position: fixed; bottom: 80px; right: 20px; z-index: 999999; width: 300px; max-width: calc(100vw - 40px);">
     <div id="aplayer"></div>
 </div>
 
-<style>
-    /* 强制把播放器外壳和列表变成暗色 */
-    #aplayer {
-        margin: 0 !important;
-    }
-    #aplayer.aplayer {
-        background-color: #1e1e1e !important; 
-        color: #e0e0e0 !important; 
-    }
-    #aplayer .aplayer-info {
-        border-bottom: 1px solid #333 !important;
-    }
-    #aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
-    #aplayer .aplayer-info .aplayer-music .aplayer-author { color: #aaa !important; }
-    #aplayer .aplayer-list {
-        background-color: #1e1e1e !important;
-    }
-    #aplayer .aplayer-list ol li {
-        color: #bbb !important;
-        border-top: 1px solid #333 !important;
-    }
-    #aplayer .aplayer-list ol li:hover,
-    #aplayer .aplayer-list ol li.aplayer-list-light {
-        background-color: #333 !important;
-        color: #fff !important;
-    }
-    #aplayer .aplayer-time { color: #888 !important; }
-    #aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
-    #aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
-    #aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
-    #aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: #00adb5 !important; }
-</style>
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Base64 内置暗色黑胶封面，绝对不失效
-    const defaultCover = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzJjMmMyYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjNDQ0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiM2NjYiLz48L3N2Zz4=';
-
+    // 不用在 JS 里写封面了，交由 CSS 的 .aplayer-pic 动态接管日夜封面
     const ap = new APlayer({
         container: document.getElementById('aplayer'),
         autoplay: false,
@@ -236,30 +195,10 @@ document.addEventListener("DOMContentLoaded", function() {
         order: 'list', 
         volume: 0.5,
         audio: [
-            { 
-                name: '江河日上', 
-                artist: 'Fayzz', 
-                url: '/music/Fayzz - 江河日上.mp3',
-                cover: defaultCover 
-            },
-            { 
-                name: 'When It Rains', 
-                artist: 'KIAH', 
-                url: '/music/KIAH - When It Rains.mp3',
-                cover: defaultCover 
-            },
-            { 
-                name: 'Shades', 
-                artist: '顾忠山', 
-                url: '/music/顾忠山 - Shades.mp3',
-                cover: defaultCover 
-            },
-            { 
-                name: 'Welcome To Va-11 Hall-A', 
-                artist: 'Garoad', 
-                url: '/music/Garoad - Welcome To Va-11 Hall-A.mp3',
-                cover: defaultCover 
-            }
+            { name: '江河日上', artist: 'Fayzz', url: '/music/Fayzz - 江河日上.mp3' },
+            { name: 'When It Rains', artist: 'KIAH', url: '/music/KIAH - When It Rains.mp3' },
+            { name: 'Shades', artist: '顾忠山', url: '/music/顾忠山 - Shades.mp3' },
+            { name: 'Welcome To Va-11 Hall-A', artist: 'Garoad', url: '/music/Garoad - Welcome To Va-11 Hall-A.mp3' }
         ]
     });
 });
