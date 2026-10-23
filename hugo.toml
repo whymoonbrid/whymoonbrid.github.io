@@ -51,3 +51,9 @@ theme = "PaperMod"
     inputPosition = "bottom"
     theme = "preferred_color_scheme"
     lang = "zh-CN"
+
+[[menu.main]]
+    identifier = "resources"
+    name = "资源"
+    url = "/resources/"
+    weight = 40
