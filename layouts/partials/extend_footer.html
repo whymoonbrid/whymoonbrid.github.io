@@ -1,11 +1,11 @@
 <!-- ========================================== -->
 <!-- 1. 页面底部显示元素 (时钟 & 访问量) -->
 <!-- ========================================== -->
-<div id="my-clock" style="text-align: center; font-size: 0.85em; font-weight: bold; margin-top: 20px; margin-bottom: 15px; opacity: 0.7; letter-spacing: 1px;"></div>
+<div id="my-clock"></div>
 
-<div id="busuanzi_container_site_pv" style="text-align: center; font-size: 0.85em; margin-bottom: 30px; opacity: 0.7;">
-    👀 总访问量: <span id="busuanzi_value_site_pv" style="font-weight: bold; color: #0066cc;">-</span> 次 | 
-    🧑‍🤝‍🧑 访客数: <span id="busuanzi_value_site_uv" style="font-weight: bold; color: #0066cc;">-</span> 人
+<div id="busuanzi_container_site_pv">
+    👀 总访问量: <span id="busuanzi_value_site_pv" style="font-weight: bold;">-</span> 次 | 
+    🧑‍🤝‍🧑 访客数: <span id="busuanzi_value_site_uv" style="font-weight: bold;">-</span> 人
 </div>
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
@@ -15,9 +15,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     
-    // ==========================================
     // [功能 A] 实时时钟
-    // ==========================================
     function updateClock() {
         var clockEl = document.getElementById('my-clock');
         if (clockEl) {
@@ -27,17 +25,13 @@ document.addEventListener("DOMContentLoaded", function() {
     updateClock();
     setInterval(updateClock, 1000);
 
-    // ==========================================
     // [功能 B] 强行注入 Giscus 评论区 (仅文章页)
-    // ==========================================
     setTimeout(function() {
         try {
             var footer = document.querySelector('footer');
-            // 只有网址包含 /posts/ 才注入，防止首页加载评论
             if (window.location.pathname.includes('/posts/') && footer && !document.getElementById('my-custom-giscus')) {
                 var giscusDiv = document.createElement('div');
                 giscusDiv.id = 'my-custom-giscus';
-                // 强制套用毛玻璃样式
                 giscusDiv.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);";
                 
                 footer.parentNode.insertBefore(giscusDiv, footer);
@@ -60,15 +54,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 giscusDiv.appendChild(script);
             }
-        } catch (e) { 
-            console.log("Giscus 评论区加载失败: ", e); 
-        }
-    }, 1000); // 延迟1秒等页面渲染
+        } catch (e) { console.log("评论区加载失败"); }
+    }, 1000);
 
-    // ==========================================
     // [功能 C] 首页打字机效果
-    // ==========================================
-    // 判断是否在首页
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
         var titleElement = document.querySelector('.home-info h1');
         var contentElement = document.querySelector('.home-info p');
@@ -77,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function() {
             var titleText = titleElement.innerText;
             var contentText = contentElement.innerText;
             
-            // 初始清空，准备打字
             titleElement.innerText = "";
             contentElement.innerText = "";
             
@@ -85,42 +73,33 @@ document.addEventListener("DOMContentLoaded", function() {
             var contentIndex = 0;
             
             function typeWriter() {
-                // 1. 先打标题
                 if (titleIndex < titleText.length) {
                     titleElement.innerHTML = titleText.substring(0, titleIndex + 1) + '<span class="cursor">_</span>';
                     titleIndex++;
                     setTimeout(typeWriter, 150); 
-                } 
-                // 2. 标题打完后，打正文
-                else if (contentIndex < contentText.length) {
-                    // ⭐ 核心修复：开始打正文时，将标题恢复为纯文本（去掉标题的光标）
-                    titleElement.innerHTML = titleText; 
-                    
+                } else if (contentIndex < contentText.length) {
+                    titleElement.innerHTML = titleText; // 标题打完清除光标
                     contentElement.innerHTML = contentText.substring(0, contentIndex + 1) + '<span class="cursor">_</span>';
                     contentIndex++;
                     setTimeout(typeWriter, 50); 
-                } 
-                // 3. 全部打完，清除光标
-                else {
-                    contentElement.innerHTML = contentText;
+                } else {
+                    contentElement.innerHTML = contentText; // 全部打完清除光标
                 }
             }
-            
-            // 延迟半秒开始，体验更好
             setTimeout(typeWriter, 500);
         }
     }
 });
 </script>
 
-<!-- 阅读进度条容器 -->
+<!-- ========================================== -->
+<!-- 3. 阅读进度条容器 -->
+<!-- ========================================== -->
 <div id="reading-progress"></div>
 <script>
     window.addEventListener('scroll', function() {
         var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
         var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        
-        // 防止短页面或首页计算除以0报错
         if (height > 0) {
             var scrolled = (winScroll / height) * 100;
             var progressBar = document.getElementById("reading-progress");
@@ -131,14 +110,13 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 </script>
 
-
-<!-- Fancybox 灯箱特效 -->
+<!-- ========================================== -->
+<!-- 4. Fancybox 灯箱特效 -->
+<!-- ========================================== -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 <script>
-    // 自动把页面里所有的图片都变成可点击放大的灯箱
     Fancybox.bind("[data-fancybox], .post-content img, .photo-gallery img", {
-        // 自定义配置（可选）
         Toolbar: {
             display: {
                 left: ["infobar"],
@@ -149,11 +127,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 </script>
 
-
-<!-- 留言板专属 Giscus 注入 -->
+<!-- ========================================== -->
+<!-- 5. 留言板专属 Giscus 注入 -->
+<!-- ========================================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // 只有当访问的页面是 /guestbook/ 时才执行
     if (window.location.pathname.includes('/guestbook/')) {
         var container = document.getElementById('guestbook-giscus');
         if (container && !container.hasChildNodes()) {
@@ -177,4 +155,3 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-

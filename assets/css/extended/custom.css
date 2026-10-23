@@ -1,19 +1,15 @@
 /* ========================================= */
 /* 0. 背景图加载过渡（底层渐变 + 图片淡入） */
 /* ========================================= */
-
-/* 先给整个网页铺一层深蓝/紫色的渐变底色 */
 html {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     background-attachment: fixed;
 }
 
-/* 让 body 透明，露出底层的渐变 */
 body {
     background-color: transparent !important;
 }
 
-/* 用伪元素来加载背景图，并实现 0.5 秒的淡入动画 */
 body::before {
     content: "";
     position: fixed;
@@ -23,10 +19,10 @@ body::before {
     height: 100vh;
     background: url('/bg.webp') no-repeat center center;
     background-size: cover;
-    z-index: -1; /* 放在所有内容的最底层 */
-    opacity: 0; /* 初始透明 */
-    animation: bgFadeIn 0.5s ease-in-out forwards; /* 0.5秒淡入，更干脆 */
-    pointer-events: none; /* 防止遮挡鼠标点击 */
+    z-index: -1;
+    opacity: 0;
+    animation: bgFadeIn 0.5s ease-in-out forwards;
+    pointer-events: none;
 }
 
 @keyframes bgFadeIn {
@@ -34,7 +30,7 @@ body::before {
 }
 
 /* ========================================= */
-/* 1. 首页欢迎区域 - 浅色模式卡片 */
+/* 1. 首页欢迎卡片 */
 /* ========================================= */
 .home-info {
     background: rgba(255, 255, 255, 0.7) !important;
@@ -48,7 +44,7 @@ body::before {
 }
 
 /* ========================================= */
-/* 2. 文章列表卡片 - 浅色模式 */
+/* 2. 文章列表卡片 */
 /* ========================================= */
 .main .post-entry {
     background: rgba(255, 255, 255, 0.7) !important;
@@ -77,18 +73,14 @@ body::before {
 /* ========================================= */
 /* 4. 深色模式适配 */
 /* ========================================= */
-
-/* 深色模式下，底层的渐变自动变暗 */
 [data-theme="dark"] html {
     background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%);
 }
 
-/* 核心修复：夜间模式下让背景图变暗变灰 */
 [data-theme="dark"] body::before {
     filter: brightness(0.3) grayscale(20%);
 }
 
-/* 深色模式下卡片的底色变成半透明深黑 */
 [data-theme="dark"] .home-info,
 [data-theme="dark"] .main .post-entry,
 [data-theme="dark"] .nav {
@@ -111,46 +103,86 @@ body::before {
 /* ========================================= */
 /* 6. 资源分享页面专属颜色 */
 /* ========================================= */
-.resources-content,
-.resources-content p,
-.resources-content h2,
-.resources-content li,
-.resources-content a {
+.resources-content, .custom-card {
+    background: rgba(255, 255, 255, 0.75);
+    padding: 30px; 
+    border-radius: 16px; 
+    backdrop-filter: blur(10px); 
+    margin-top: 20px; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    color: #222 !important;
+}
+.resources-content p, .resources-content h2, .resources-content li, .custom-title, .custom-text {
     color: #222 !important; 
 }
-
-/* 专门把下载链接变成蓝色，更好看 */
 .resources-content a {
     color: #0066cc !important;
     text-decoration: underline;
     font-weight: bold;
 }
 
+[data-theme="dark"] .resources-content,
+[data-theme="dark"] .custom-card {
+    background: rgba(30, 30, 30, 0.85) !important;
+}
+[data-theme="dark"] .resources-content p,
+[data-theme="dark"] .resources-content h2,
+[data-theme="dark"] .custom-title,
+[data-theme="dark"] .custom-text {
+    color: #eee !important;
+}
+
 /* ========================================= */
-/* 7. 左下角悬浮访问量统计 */
+/* 7. 极致悬浮：时钟(右) & 访问量(左) */
 /* ========================================= */
-#busuanzi_container_site_pv {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0, 0, 0, 0.4); /* 半透明黑底 */
+#my-clock, #busuanzi_container_site_pv {
+    position: fixed !important;
+    bottom: 20px !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
     color: #fff !important;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    z-index: 999;
-    backdrop-filter: blur(5px); /* 毛玻璃效果 */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: opacity 0.3s ease;
+    padding: 6px 15px !important;
+    border-radius: 20px !important;
+    font-size: 12px !important;
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    backdrop-filter: blur(5px) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+    transition: all 0.3s ease !important;
+    opacity: 0.7 !important;
 }
 
-#busuanzi_container_site_pv:hover {
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.7); /* 鼠标放上去变深 */
+#my-clock:hover, #busuanzi_container_site_pv:hover {
+    opacity: 1 !important;
+    background: rgba(0, 0, 0, 0.8) !important;
 }
 
+#my-clock { right: 20px !important; }
+#busuanzi_container_site_pv { left: 20px !important; }
 
-/* 打字机光标闪烁特效 */
+[data-theme="dark"] #my-clock, 
+[data-theme="dark"] #busuanzi_container_site_pv {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ========================================= */
+/* 8. 阅读进度条 */
+/* ========================================= */
+#reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+    z-index: 9999;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
+}
+
+/* ========================================= */
+/* 9. 打字机光标 */
+/* ========================================= */
 .cursor {
     display: inline-block;
     width: 2px;
@@ -164,68 +196,4 @@ body::before {
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
-}
-
-/* 优化底部时钟和统计的排版 */
-#my-clock, #busuanzi_container_site_pv {
-    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 5px 15px;
-    border-radius: 20px;
-    display: inline-block;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.3);
-}
-
-[data-theme="dark"] #my-clock, 
-[data-theme="dark"] #busuanzi_container_site_pv {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* 阅读进度条样式 */
-#reading-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 4px;
-    background: linear-gradient(to right, #00c6ff, #0072ff); /* 渐变蓝 */
-    z-index: 9999;
-    transition: width 0.1s ease;
-    box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
-}
-
-
-/* ========================================= */
-/* 留言板/资源页 通用毛玻璃卡片 */
-/* ========================================= */
-.custom-card, .resources-content {
-    background: rgba(255, 255, 255, 0.75); /* 浅色模式下稍微透一点 */
-    padding: 30px; 
-    border-radius: 16px; 
-    backdrop-filter: blur(10px); 
-    margin-top: 20px; 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    color: #333 !important;
-}
-
-.custom-title, .custom-text {
-    color: #333 !important;
-}
-
-/* 深色模式下的卡片和文字 */
-[data-theme="dark"] .custom-card,
-[data-theme="dark"] .resources-content {
-    background: rgba(30, 30, 30, 0.85); /* 深色模式下变成半透明黑 */
-    color: #eee !important;
-}
-
-[data-theme="dark"] .custom-title,
-[data-theme="dark"] .custom-text,
-[data-theme="dark"] .resources-content * {
-    color: #eee !important;
 }
