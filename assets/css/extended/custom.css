@@ -71,19 +71,22 @@ body::before {
 }
 
 /* ========================================= */
-/* 4. 深色模式适配 */
+/* 4. 深色模式适配（通用） */
 /* ========================================= */
-[data-theme="dark"] html {
+[data-theme="dark"] html, .dark html {
     background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%);
 }
 
-[data-theme="dark"] body::before {
+[data-theme="dark"] body::before, .dark body::before {
     filter: brightness(0.3) grayscale(20%);
 }
 
 [data-theme="dark"] .home-info,
 [data-theme="dark"] .main .post-entry,
-[data-theme="dark"] .nav {
+[data-theme="dark"] .nav,
+.dark .home-info,
+.dark .main .post-entry,
+.dark .nav {
     background: rgba(20, 20, 20, 0.75) !important; 
     color: #eee;
 }
@@ -96,7 +99,8 @@ body::before {
     font-weight: 600;
 }
 
-[data-theme="dark"] .nav a, [data-theme="dark"] footer {
+[data-theme="dark"] .nav a, [data-theme="dark"] footer,
+.dark .nav a, .dark footer {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
@@ -122,13 +126,19 @@ body::before {
 }
 
 [data-theme="dark"] .resources-content,
-[data-theme="dark"] .custom-card {
+[data-theme="dark"] .custom-card,
+.dark .resources-content,
+.dark .custom-card {
     background: rgba(30, 30, 30, 0.85) !important;
 }
 [data-theme="dark"] .resources-content p,
 [data-theme="dark"] .resources-content h2,
 [data-theme="dark"] .custom-title,
-[data-theme="dark"] .custom-text {
+[data-theme="dark"] .custom-text,
+.dark .resources-content p,
+.dark .resources-content h2,
+.dark .custom-title,
+.dark .custom-text {
     color: #eee !important;
 }
 
@@ -160,7 +170,9 @@ body::before {
 #busuanzi_container_site_pv { left: 20px !important; }
 
 [data-theme="dark"] #my-clock, 
-[data-theme="dark"] #busuanzi_container_site_pv {
+[data-theme="dark"] #busuanzi_container_site_pv,
+.dark #my-clock,
+.dark #busuanzi_container_site_pv {
     background: rgba(255, 255, 255, 0.15) !important;
     border: 1px solid rgba(255,255,255,0.1);
 }
@@ -196,4 +208,101 @@ body::before {
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
+}
+
+/* ========================================= */
+/* 10. 关于页面：自适应明暗模式的毛玻璃卡片 */
+/* ========================================= */
+
+/* 日间模式（默认） */
+.about-card {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 30px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+.about-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.about-card h2 {
+    color: #333 !important;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+.about-card .about-title {
+    color: #333 !important;
+    margin: 0 !important;
+}
+.about-card .about-subtitle {
+    color: #666 !important;
+    margin-top: 8px;
+}
+.about-card p, .about-card li {
+    color: #333 !important;
+}
+
+.about-divider {
+    margin: 30px 0;
+    border: none;
+    border-top: 1px dashed #ccc;
+}
+
+.about-card a.link-github, .about-card a.link-email {
+    color: #0066cc !important;
+    font-weight: bold;
+}
+.about-card a.link-bili {
+    color: #00A1D6 !important;
+    font-weight: bold;
+}
+
+/* 夜间模式（同时兼容 .dark 和 [data-theme="dark"]） */
+.dark .about-card,
+[data-theme="dark"] .about-card {
+    background: rgba(30, 30, 30, 0.85);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .about-card h2,
+.dark .about-card .about-title,
+[data-theme="dark"] .about-card h2,
+[data-theme="dark"] .about-card .about-title {
+    color: #ffffff !important;
+}
+
+.dark .about-card .about-subtitle,
+[data-theme="dark"] .about-card .about-subtitle {
+    color: #aaaaaa !important;
+}
+
+.dark .about-card p, .dark .about-card li,
+[data-theme="dark"] .about-card p, 
+[data-theme="dark"] .about-card li {
+    color: #cccccc !important;
+}
+
+.dark .about-divider,
+[data-theme="dark"] .about-divider {
+    border-top-color: #555;
+}
+
+.dark .about-card a.link-github, .dark .about-card a.link-email,
+[data-theme="dark"] .about-card a.link-github,
+[data-theme="dark"] .about-card a.link-email {
+    color: #4da6ff !important;
+}
+.dark .about-card a.link-bili,
+[data-theme="dark"] .about-card a.link-bili {
+    color: #00A1D6 !important;
 }
