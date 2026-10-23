@@ -99,3 +99,19 @@ body::before {
 [data-theme="dark"] .nav a, [data-theme="dark"] footer {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
+
+/* 强制资源分享页面内部所有元素的文字颜色为深灰/黑色 */
+.resources-content,
+.resources-content p,
+.resources-content h2,
+.resources-content li,
+.resources-content a {
+    color: #222 !important; 
+}
+
+/* 专门把下载链接变成蓝色，更好看 */
+.resources-content a {
+    color: #0066cc !important;
+    text-decoration: underline;
+    font-weight: bold;
+}
