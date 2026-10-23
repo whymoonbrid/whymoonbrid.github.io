@@ -16,8 +16,8 @@ ShowToc = false
 ## 📸 照片分享
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
-<img src="/photos/pixel-art.png" alt="像素操操操" onclick="window.open(this.src)" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;">
-<img src="/photos/roseshun.png" alt="玫瑰顺飞" onclick="window.open(this.src)" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;">
+    <img src="/photos/pixel-art.png" data-fancybox="gallery" alt="像素操操操" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;">
+    <img src="/photos/roseshun.png" data-fancybox="gallery" alt="玫瑰顺飞" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;">
 </div>
 
 </div>

@@ -165,3 +165,37 @@ body::before {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
+
+/* 优化底部时钟和统计的排版 */
+#my-clock, #busuanzi_container_site_pv {
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+[data-theme="dark"] #my-clock, 
+[data-theme="dark"] #busuanzi_container_site_pv {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 阅读进度条样式 */
+#reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background: linear-gradient(to right, #00c6ff, #0072ff); /* 渐变蓝 */
+    z-index: 9999;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
+}
+
