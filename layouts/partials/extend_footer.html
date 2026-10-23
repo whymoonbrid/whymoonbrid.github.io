@@ -161,7 +161,8 @@ document.addEventListener("DOMContentLoaded", function() {
             script.setAttribute("data-category", giscusCategory);
             script.setAttribute("data-category-id", giscusCategoryId);
             script.setAttribute("data-mapping", "pathname");
-            script.setAttribute("data-strict", "1");
+            // 👇 核心修改：将 "1" 改成了 "0"，关闭严格模式
+            script.setAttribute("data-strict", "0");
             script.setAttribute("data-reactions-enabled", "1");
             script.setAttribute("data-emit-metadata", "0");
             script.setAttribute("data-input-position", "bottom");
