@@ -22,41 +22,26 @@ theme = "PaperMod"
     Title = "Hi there!"
     Content = "日常分享用，总之什么都会抛过来一点"
 
+# ========================================== #
+# 导航菜单 (已去重，按权重排序)
+# ========================================== #
 [[menu.main]]
-    identifier = "archives"
-    name = "归档"
-    url = "/posts/"
-    weight = 10
-
-[[menu.main]]
-    identifier = "categories"
-    name = "分类"
-    url = "/categories/"
-    weight = 20
-
-[[menu.main]]
-    identifier = "tags"
-    name = "标签"
-    url = "/tags/"
-    weight = 30
-
-[params.giscus]
-    repo = "whymoonbrid/whymoonbrid.github.io"
-    repoId = "R_kgDOVTyFwQ"
-    category = "Announcements"
-    categoryId = "DIC_kwDOVTyFwC4DJW4G"
-    mapping = "pathname"
-    reactionsEnabled = "1"
-    emitMetadata = "0"
-    inputPosition = "bottom"
-    theme = "preferred_color_scheme"
-    lang = "zh-CN"
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 5
 
 [[menu.main]]
     identifier = "archives"
     name = "归档"
     url = "/posts/"
     weight = 10
+
+[[menu.main]]
+    identifier = "guestbook"
+    name = "留言板"
+    url = "/guestbook/"
+    weight = 15
 
 [[menu.main]]
     identifier = "categories"
@@ -82,19 +67,22 @@ theme = "PaperMod"
     url = "/search/"
     weight = 50
 
+# ========================================== #
+# Giscus 评论配置
+# ========================================== #
+[params.giscus]
+    repo = "whymoonbrid/whymoonbrid.github.io"
+    repoId = "R_kgDOVTyFwQ"
+    category = "General"                          # ⚠️ 注意：统一改为了 General
+    categoryId = "DIC_kwDOVTyFwC4DJW4H"           # ⚠️ 注意：统一为了 ...4H
+    mapping = "pathname"
+    reactionsEnabled = "1"
+    emitMetadata = "0"
+    inputPosition = "bottom"
+    theme = "preferred_color_scheme"
+    lang = "zh-CN"
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
-
-[[menu.main]]
-    identifier = "about"
-    name = "关于"
-    url = "/about/"
-    weight = 5  # 数字设小一点，让它排在导航栏第一个！
-
-[[menu.main]]
-    identifier = "guestbook"
-    name = "留言板"
-    url = "/guestbook/"
-    weight = 15

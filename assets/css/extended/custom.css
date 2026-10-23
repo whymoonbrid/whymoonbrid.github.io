@@ -30,7 +30,7 @@ body::before {
 }
 
 /* ========================================= */
-/* 1. 首页欢迎卡片 */
+/* 1. 首页欢迎卡片 & 文章列表卡片 */
 /* ========================================= */
 .home-info {
     background: rgba(255, 255, 255, 0.7) !important;
@@ -43,9 +43,6 @@ body::before {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* ========================================= */
-/* 2. 文章列表卡片 */
-/* ========================================= */
 .main .post-entry {
     background: rgba(255, 255, 255, 0.7) !important;
     backdrop-filter: blur(5px);
@@ -63,49 +60,53 @@ body::before {
 }
 
 /* ========================================= */
-/* 3. 导航栏透明感 */
+/* 2. 导航栏透明感 (修复 .nav -> .header-nav) */
 /* ========================================= */
-.nav {
+.header-nav {
     background: rgba(255, 255, 255, 0.6) !important;
     backdrop-filter: blur(5px);
 }
 
 /* ========================================= */
-/* 4. 通用深色模式适配 */
+/* 3. 通用深色模式适配 (修复根节点选择器) */
 /* ========================================= */
-[data-theme="dark"] html, .dark html {
+html[data-theme="dark"], 
+html.dark {
     background: linear-gradient(135deg, #0f0f13 0%, #131317 50%, #0a0a0d 100%);
 }
 
-[data-theme="dark"] body::before, .dark body::before {
+html[data-theme="dark"] body::before, 
+html.dark body::before {
     filter: brightness(0.3) grayscale(20%);
 }
 
-[data-theme="dark"] .home-info,
-[data-theme="dark"] .main .post-entry,
-[data-theme="dark"] .nav,
-.dark .home-info,
-.dark .main .post-entry,
-.dark .nav {
+html[data-theme="dark"] .home-info,
+html[data-theme="dark"] .main .post-entry,
+html[data-theme="dark"] .header-nav,
+html.dark .home-info,
+html.dark .main .post-entry,
+html.dark .header-nav {
     background: rgba(20, 20, 20, 0.75) !important; 
     color: #eee;
 }
 
 /* ========================================= */
-/* 5. 文字阴影优化（防花眼） */
+/* 4. 文字阴影优化（防花眼） */
 /* ========================================= */
-.nav a, footer {
+.header-nav a, footer {
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
     font-weight: 600;
 }
 
-[data-theme="dark"] .nav a, [data-theme="dark"] footer,
-.dark .nav a, .dark footer {
+html[data-theme="dark"] .header-nav a, 
+html[data-theme="dark"] footer,
+html.dark .header-nav a, 
+html.dark footer {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 /* ========================================= */
-/* 6. 资源分享页面专属颜色 */
+/* 5. 资源分享页面专属颜色 (修复深色漏掉的 li) */
 /* ========================================= */
 .resources-content, .custom-card {
     background: rgba(255, 255, 255, 0.75);
@@ -116,7 +117,11 @@ body::before {
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     color: #222 !important;
 }
-.resources-content p, .resources-content h2, .resources-content li, .custom-title, .custom-text {
+.resources-content p, 
+.resources-content h2, 
+.resources-content li, /* 修复：补上 li */
+.custom-title, 
+.custom-text {
     color: #222 !important; 
 }
 .resources-content a {
@@ -125,25 +130,28 @@ body::before {
     font-weight: bold;
 }
 
-[data-theme="dark"] .resources-content,
-[data-theme="dark"] .custom-card,
-.dark .resources-content,
-.dark .custom-card {
+html[data-theme="dark"] .resources-content,
+html[data-theme="dark"] .custom-card,
+html.dark .resources-content,
+html.dark .custom-card {
     background: rgba(30, 30, 30, 0.85) !important;
 }
-[data-theme="dark"] .resources-content p,
-[data-theme="dark"] .resources-content h2,
-[data-theme="dark"] .custom-title,
-[data-theme="dark"] .custom-text,
-.dark .resources-content p,
-.dark .resources-content h2,
-.dark .custom-title,
-.dark .custom-text {
+
+html[data-theme="dark"] .resources-content p,
+html[data-theme="dark"] .resources-content h2,
+html[data-theme="dark"] .resources-content li, /* 修复：补上 li */
+html[data-theme="dark"] .custom-title,
+html[data-theme="dark"] .custom-text,
+html.dark .resources-content p,
+html.dark .resources-content h2,
+html.dark .resources-content li, /* 修复：补上 li */
+html.dark .custom-title,
+html.dark .custom-text {
     color: #eee !important;
 }
 
 /* ========================================= */
-/* 7. 极致悬浮：时钟(右) & 访问量(左) */
+/* 6. 极致悬浮：时钟(右) & 访问量(左) */
 /* ========================================= */
 #my-clock, #busuanzi_container_site_pv {
     position: fixed !important;
@@ -169,16 +177,16 @@ body::before {
 #my-clock { right: 20px !important; }
 #busuanzi_container_site_pv { left: 20px !important; }
 
-[data-theme="dark"] #my-clock, 
-[data-theme="dark"] #busuanzi_container_site_pv,
-.dark #my-clock,
-.dark #busuanzi_container_site_pv {
+html[data-theme="dark"] #my-clock, 
+html[data-theme="dark"] #busuanzi_container_site_pv,
+html.dark #my-clock,
+html.dark #busuanzi_container_site_pv {
     background: rgba(255, 255, 255, 0.15) !important;
     border: 1px solid rgba(255,255,255,0.1);
 }
 
 /* ========================================= */
-/* 8. 阅读进度条 */
+/* 7. 阅读进度条 & 打字机光标 */
 /* ========================================= */
 #reading-progress {
     position: fixed;
@@ -192,9 +200,6 @@ body::before {
     box-shadow: 0 0 10px rgba(0, 114, 255, 0.7);
 }
 
-/* ========================================= */
-/* 9. 打字机光标 */
-/* ========================================= */
 .cursor {
     display: inline-block;
     width: 2px;
@@ -204,14 +209,13 @@ body::before {
     margin-left: 2px;
     font-weight: normal;
 }
-
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
 
 /* ========================================= */
-/* 10. 关于页面：自适应明暗模式的毛玻璃卡片 */
+/* 8. 关于页面：自适应明暗模式 */
 /* ========================================= */
 .about-card {
     background: rgba(255, 255, 255, 0.85);
@@ -232,80 +236,35 @@ body::before {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.about-card h2 {
-    color: #333 !important;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-.about-card .about-title {
-    color: #333 !important;
-    margin: 0 !important;
-}
-.about-card .about-subtitle {
-    color: #666 !important;
-    margin-top: 8px;
-}
-.about-card p, .about-card li {
-    color: #333 !important;
-}
+.about-card h2 { color: #333 !important; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+.about-card .about-title { color: #333 !important; margin: 0 !important; }
+.about-card .about-subtitle { color: #666 !important; margin-top: 8px; }
+.about-card p, .about-card li { color: #333 !important; }
+.about-divider { margin: 30px 0; border: none; border-top: 1px dashed #ccc; }
+.about-card a.link-github, .about-card a.link-email { color: #0066cc !important; font-weight: bold; }
+.about-card a.link-bili { color: #00A1D6 !important; font-weight: bold; }
 
-.about-divider {
-    margin: 30px 0;
-    border: none;
-    border-top: 1px dashed #ccc;
-}
-
-.about-card a.link-github, .about-card a.link-email {
-    color: #0066cc !important;
-    font-weight: bold;
-}
-.about-card a.link-bili {
-    color: #00A1D6 !important;
-    font-weight: bold;
-}
-
-.dark .about-card,
-[data-theme="dark"] .about-card {
+html.dark .about-card,
+html[data-theme="dark"] .about-card {
     background: rgba(30, 30, 30, 0.85);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.dark .about-card h2,
-.dark .about-card .about-title,
-[data-theme="dark"] .about-card h2,
-[data-theme="dark"] .about-card .about-title {
-    color: #ffffff !important;
-}
-
-.dark .about-card .about-subtitle,
-[data-theme="dark"] .about-card .about-subtitle {
-    color: #aaaaaa !important;
-}
-
-.dark .about-card p, .dark .about-card li,
-[data-theme="dark"] .about-card p, 
-[data-theme="dark"] .about-card li {
-    color: #cccccc !important;
-}
-
-.dark .about-divider,
-[data-theme="dark"] .about-divider {
-    border-top-color: #555;
-}
-
-.dark .about-card a.link-github, .dark .about-card a.link-email,
-[data-theme="dark"] .about-card a.link-github,
-[data-theme="dark"] .about-card a.link-email {
-    color: #4da6ff !important;
-}
-.dark .about-card a.link-bili,
-[data-theme="dark"] .about-card a.link-bili {
-    color: #00A1D6 !important;
-}
+html.dark .about-card h2, html.dark .about-card .about-title,
+html[data-theme="dark"] .about-card h2, html[data-theme="dark"] .about-card .about-title { color: #ffffff !important; }
+html.dark .about-card .about-subtitle,
+html[data-theme="dark"] .about-card .about-subtitle { color: #aaaaaa !important; }
+html.dark .about-card p, html.dark .about-card li,
+html[data-theme="dark"] .about-card p, html[data-theme="dark"] .about-card li { color: #cccccc !important; }
+html.dark .about-divider,
+html[data-theme="dark"] .about-divider { border-top-color: #555; }
+html.dark .about-card a.link-github, html.dark .about-card a.link-email,
+html[data-theme="dark"] .about-card a.link-github, html[data-theme="dark"] .about-card a.link-email { color: #4da6ff !important; }
+html.dark .about-card a.link-bili,
+html[data-theme="dark"] .about-card a.link-bili { color: #00A1D6 !important; }
 
 /* ========================================== */
-/* 11. 音乐播放器：自适应明暗模式 */
+/* 9. 音乐播放器：自适应明暗模式 */
 /* ========================================== */
 #aplayer {
     margin: 0 !important;
@@ -315,64 +274,71 @@ body::before {
     transition: background 0.3s;
 }
 
-/* 播放器日间模式 */
-.aplayer.aplayer {
-    background-color: rgba(255, 255, 255, 0.9) !important; 
-    color: #333 !important;
-}
+/* 日间模式 */
+.aplayer.aplayer { background-color: rgba(255, 255, 255, 0.9) !important; color: #333 !important; }
 .aplayer .aplayer-info { border-bottom: 1px solid #eee !important; }
 .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #333 !important; }
 .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #666 !important; }
 .aplayer .aplayer-list { background-color: rgba(255, 255, 255, 0.9) !important; }
 .aplayer .aplayer-list ol li { color: #444 !important; border-top: 1px solid #eee !important; }
-.aplayer .aplayer-list ol li:hover,
-.aplayer .aplayer-list ol li.aplayer-list-light { background-color: #f0f0f0 !important; color: #000 !important; }
+.aplayer .aplayer-list ol li:hover, .aplayer .aplayer-list ol li.aplayer-list-light { background-color: #f0f0f0 !important; color: #000 !important; }
 .aplayer .aplayer-time { color: #666 !important; }
 .aplayer .aplayer-time .aplayer-icon path { fill: #666 !important; }
 .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #ddd !important; }
 .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #bbb !important; }
 .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: #00adb5 !important; }
 
-/* 播放器夜间模式 */
-.dark .aplayer.aplayer,
-[data-theme="dark"] .aplayer.aplayer {
-    background-color: rgba(30, 30, 30, 0.9) !important; 
-    color: #eee !important;
-}
-.dark .aplayer .aplayer-info,
-[data-theme="dark"] .aplayer .aplayer-info { border-bottom: 1px solid #333 !important; }
-.dark .aplayer .aplayer-info .aplayer-music .aplayer-title,
-[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
-.dark .aplayer .aplayer-info .aplayer-music .aplayer-author,
-[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #aaa !important; }
-.dark .aplayer .aplayer-list,
-[data-theme="dark"] .aplayer .aplayer-list { background-color: rgba(30, 30, 30, 0.9) !important; }
-.dark .aplayer .aplayer-list ol li,
-[data-theme="dark"] .aplayer .aplayer-list ol li { color: #bbb !important; border-top: 1px solid #333 !important; }
-.dark .aplayer .aplayer-list ol li:hover,
-.dark .aplayer .aplayer-list ol li.aplayer-list-light,
-[data-theme="dark"] .aplayer .aplayer-list ol li:hover,
-[data-theme="dark"] .aplayer .aplayer-list ol li.aplayer-list-light { background-color: #333 !important; color: #fff !important; }
-.dark .aplayer .aplayer-time,
-[data-theme="dark"] .aplayer .aplayer-time { color: #888 !important; }
-.dark .aplayer .aplayer-time .aplayer-icon path,
-[data-theme="dark"] .aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
-.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar,
-[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
-.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded,
-[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
+/* 夜间模式 */
+html.dark .aplayer.aplayer,
+html[data-theme="dark"] .aplayer.aplayer { background-color: rgba(30, 30, 30, 0.9) !important; color: #eee !important; }
+html.dark .aplayer .aplayer-info,
+html[data-theme="dark"] .aplayer .aplayer-info { border-bottom: 1px solid #333 !important; }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-title,
+html[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #fff !important; }
+html.dark .aplayer .aplayer-info .aplayer-music .aplayer-author,
+html[data-theme="dark"] .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #aaa !important; }
+html.dark .aplayer .aplayer-list,
+html[data-theme="dark"] .aplayer .aplayer-list { background-color: rgba(30, 30, 30, 0.9) !important; }
+html.dark .aplayer .aplayer-list ol li,
+html[data-theme="dark"] .aplayer .aplayer-list ol li { color: #bbb !important; border-top: 1px solid #333 !important; }
+html.dark .aplayer .aplayer-list ol li:hover, html.dark .aplayer .aplayer-list ol li.aplayer-list-light,
+html[data-theme="dark"] .aplayer .aplayer-list ol li:hover, html[data-theme="dark"] .aplayer .aplayer-list ol li.aplayer-list-light { background-color: #333 !important; color: #fff !important; }
+html.dark .aplayer .aplayer-time,
+html[data-theme="dark"] .aplayer .aplayer-time { color: #888 !important; }
+html.dark .aplayer .aplayer-time .aplayer-icon path,
+html[data-theme="dark"] .aplayer .aplayer-time .aplayer-icon path { fill: #888 !important; }
+html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar,
+html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar { background: #444 !important; }
+html.dark .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded,
+html[data-theme="dark"] .aplayer .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded { background: #666 !important; }
 
-/* ========================================== */
-/* 12. 播放器封面：随日夜模式动态切换 */
-/* ========================================== */
-
-/* 日间模式：浅灰白黑胶封面 */
+/* 播放器封面：随日夜模式动态切换 */
 .aplayer .aplayer-pic {
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2YwZjBmMCIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjZGRkIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNiYmIiLz48L3N2Zz4=') !important;
 }
-
-/* 夜间模式：深灰黑黑胶封面 */
-.dark .aplayer .aplayer-pic,
-[data-theme="dark"] .aplayer .aplayer-pic {
+html.dark .aplayer .aplayer-pic,
+html[data-theme="dark"] .aplayer .aplayer-pic {
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzJjMmMyYyIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMwIiBmaWxsPSIjNDQ0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiM2NjYiLz48L3N2Zz4=') !important;
+}
+
+/* ========================================== */
+/* 10. 移动端适配 (解决手机端遮挡问题) */
+/* ========================================== */
+@media screen and (max-width: 768px) {
+    /* 手机端隐藏常驻时钟 */
+    #my-clock {
+        display: none !important;
+    }
+    /* 手机端隐藏悬浮音乐播放器（防止遮挡正文） */
+    #my-aplayer-box {
+        display: none !important;
+    }
+    /* 手机端把访问量稍微缩小并移到底部居中位置，或者直接隐藏 */
+    #busuanzi_container_site_pv {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        bottom: 10px !important;
+        font-size: 10px !important;
+        opacity: 0.5 !important;
+    }
 }
