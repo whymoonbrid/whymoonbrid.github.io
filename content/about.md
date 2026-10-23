@@ -18,14 +18,20 @@ ShowToc = false
 <hr style="margin: 30px 0; border: none; border-top: 1px dashed #ccc;">
 
 <h2 style="color: #333 !important;">🛠️ 关于这个博客</h2>
-
-以后写点文字有关的东西就存这上面了，说说以后就纯发图。
+<p style="color: #333 !important;">以后写点文字有关的东西就存这上面了，说说以后就纯发图。</p>
 
 <h2 style="color: #333 !important;">📬 联系我</h2>
+<p style="color: #333 !important;">如果你对我的文章感兴趣，或者想跟我交个朋友，可以通过以下方式找到我：</p>
 
-如果你对我的文章感兴趣，或者想跟我交个朋友，可以通过以下方式找到我：
-
-- **GitHub**: <a href="https://github.com/whymoonbrid" target="_blank" style="color: #0066cc !important; text-decoration: underline; font-weight: bold;">whymoonbrid</a>
-- **Email**: <a href="mailto:261105091@qq.com" style="color: #0066cc !important; text-decoration: underline; font-weight: bold;">261105091@qq.com</a>
+<ul>
+    <li style="color: #333 !important; margin-bottom: 10px;">
+        <strong>GitHub</strong>: 
+        <a href="https://github.com/whymoonbrid" target="_blank" style="color: #0066cc !important; text-decoration: underline; font-weight: bold;">whymoonbrid</a>
+    </li>
+    <li style="color: #333 !important;">
+        <strong>Email</strong>: 
+        <a href="mailto:261105091@qq.com" target="_blank" style="color: #0066cc !important; text-decoration: underline; font-weight: bold;">261105091@qq.com</a>
+    </li>
+</ul>
 
 </div>

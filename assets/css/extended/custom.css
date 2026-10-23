@@ -21,7 +21,7 @@ body::before {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: url('https://cdn.jsdelivr.net/gh/whymoonbrid/whymoonbrid.github.io@main/static/bg.png') no-repeat center center;
+    background: url('/bg.webp') no-repeat center center;
     background-size: cover;
     z-index: -1; /* 放在所有内容的最底层 */
     opacity: 0; /* 初始透明 */
