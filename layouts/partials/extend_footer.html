@@ -79,14 +79,73 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 4. Fancybox 灯箱特效 -->
+<!-- 4. Fancybox 灯箱特效（悬停或首次点击时才加载） -->
 <!-- ========================================== -->
-<link rel="stylesheet" href="/vendor/fancybox/fancybox.css"/>
-<script src="/vendor/fancybox/fancybox.umd.js"></script>
 <script>
-    Fancybox.bind("[data-fancybox], .post-content img, .photo-gallery img", {
-        Toolbar: { display: { left: ["infobar"], middle: [], right: ["download", "zoomIn", "zoomOut", "rotate", "close"] } },
-    });
+(function () {
+    var SELECTOR = "[data-fancybox], .post-content img, .photo-gallery img";
+    var OPTIONS = {
+        Toolbar: { display: { left: ["infobar"], middle: [], right: ["download", "zoomIn", "zoomOut", "rotate", "close"] } }
+    };
+    var state = 0; // 0 未加载，1 加载中，2 已绑定
+    var queued = null;
+
+    function openImage(img) {
+        var groupName = img.getAttribute("data-fancybox");
+        var group = groupName
+            ? Array.prototype.slice.call(document.querySelectorAll('[data-fancybox="' + groupName + '"]'))
+            : [img];
+        var items = group.map(function (el) {
+            return { src: el.currentSrc || el.src, type: "image" };
+        });
+        Fancybox.show(items, Object.assign({ startIndex: Math.max(0, group.indexOf(img)) }, OPTIONS));
+    }
+
+    function ensureReady(done) {
+        if (state === 2) {
+            if (done) done();
+            return;
+        }
+        if (done) queued = done;
+        if (state === 1) return;
+        state = 1;
+
+        var css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = "/vendor/fancybox/fancybox.css";
+        document.head.appendChild(css);
+
+        var script = document.createElement("script");
+        script.src = "/vendor/fancybox/fancybox.umd.js";
+        script.onload = function () {
+            Fancybox.bind(SELECTOR, OPTIONS);
+            state = 2;
+            var fn = queued;
+            queued = null;
+            if (fn) fn();
+        };
+        script.onerror = function () {
+            state = 0;
+            queued = null;
+        };
+        document.head.appendChild(script);
+    }
+
+    document.addEventListener("mouseover", function (e) {
+        if (e.target.closest && e.target.closest(SELECTOR)) ensureReady();
+    }, true);
+    document.addEventListener("touchstart", function (e) {
+        if (e.target.closest && e.target.closest(SELECTOR)) ensureReady();
+    }, { passive: true, capture: true });
+
+    document.addEventListener("click", function (e) {
+        var img = e.target.closest && e.target.closest(SELECTOR);
+        if (!img) return;
+        if (state === 2) return; // Fancybox 已接管点击
+        e.preventDefault();
+        ensureReady(function () { openImage(img); });
+    }, true);
+})();
 </script>
 
 <!-- ========================================== -->
@@ -173,19 +232,16 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 6. 悬浮背景音乐播放器 -->
+<!-- 6. 悬浮背景音乐播放器（点击后才加载 APlayer） -->
 <!-- ========================================== -->
-<link rel="stylesheet" href="/vendor/aplayer/APlayer.min.css">
-<script src="/vendor/aplayer/APlayer.min.js"></script>
-
-<div id="my-aplayer-box" style="position: fixed; bottom: 80px; right: 20px; z-index: 999999; width: 300px; max-width: calc(100vw - 40px);">
+<div id="my-aplayer-box" hidden style="position: fixed; bottom: 80px; right: 20px; z-index: 999999; width: 300px; max-width: calc(100vw - 40px);">
     <div id="aplayer"></div>
 </div>
+<button id="music-launcher" type="button" aria-label="打开音乐播放器" title="打开音乐播放器">♪</button>
 <button id="resume-music" type="button" hidden>▶ 继续播放</button>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // 继续播放按钮的位置与样式在 custom.css 中定义
+(function () {
     var STORAGE_KEY = 'my-aplayer-state';
     var saved = {};
     try {
@@ -194,22 +250,17 @@ document.addEventListener("DOMContentLoaded", function() {
         saved = {};
     }
 
-    const ap = new APlayer({
-        container: document.getElementById('aplayer'),
-        autoplay: false,
-        theme: '#00adb5', 
-        loop: 'all',
-        order: 'list', 
-        volume: 0.5,
-        audio: [
-            { name: '江河日上', artist: 'Fayzz', url: '/music/Fayzz - 江河日上.mp3' },
-            { name: 'When It Rains', artist: 'KIAH', url: '/music/KIAH - When It Rains.mp3' },
-            { name: 'Shades', artist: '顾忠山', url: '/music/顾忠山 - Shades.mp3' },
-            { name: 'Welcome To Va-11 Hall-A', artist: 'Garoad', url: '/music/Garoad - Welcome To Va-11 Hall-A.mp3' }
-        ]
-    });
-
+    var box = document.getElementById('my-aplayer-box');
+    var launcher = document.getElementById('music-launcher');
     var chip = document.getElementById('resume-music');
+    var ap = null;
+    var loading = false;
+    var waiters = [];
+
+    // 上次是播放中的话，先在按钮旁提供续播入口，不提前加载播放器
+    if (saved.playing && !window.matchMedia('(max-width: 768px)').matches) {
+        chip.hidden = false;
+    }
 
     function saveState() {
         try {
@@ -222,50 +273,93 @@ document.addEventListener("DOMContentLoaded", function() {
         } catch (e) {}
     }
 
-    if (Number.isInteger(saved.index) && ap.list.audios[saved.index]) {
-        ap.list.switch(saved.index);
-    }
-    if (typeof saved.volume === 'number') {
-        ap.volume(saved.volume, true);
-    }
-    if (typeof saved.time === 'number' && saved.time > 1) {
-        var resumeTime = saved.time;
-        var applySeek = function() {
-            try { ap.audio.currentTime = resumeTime; } catch (e) {}
-        };
-        if (ap.audio.readyState >= 1) {
-            applySeek();
-        } else {
-            ap.audio.addEventListener('loadedmetadata', applySeek, { once: true });
+    function createPlayer() {
+        ap = new APlayer({
+            container: document.getElementById('aplayer'),
+            autoplay: false,
+            theme: '#00adb5',
+            loop: 'all',
+            order: 'list',
+            volume: 0.5,
+            audio: [
+                { name: '江河日上', artist: 'Fayzz', url: '/music/Fayzz - 江河日上.mp3' },
+                { name: 'When It Rains', artist: 'KIAH', url: '/music/KIAH - When It Rains.mp3' },
+                { name: 'Shades', artist: '顾忠山', url: '/music/顾忠山 - Shades.mp3' },
+                { name: 'Welcome To Va-11 Hall-A', artist: 'Garoad', url: '/music/Garoad - Welcome To Va-11 Hall-A.mp3' }
+            ]
+        });
+
+        if (Number.isInteger(saved.index) && ap.list.audios[saved.index]) {
+            ap.list.switch(saved.index);
         }
+        if (typeof saved.volume === 'number') {
+            ap.volume(saved.volume, true);
+        }
+        if (typeof saved.time === 'number' && saved.time > 1) {
+            var resumeTime = saved.time;
+            var applySeek = function () {
+                try { ap.audio.currentTime = resumeTime; } catch (e) {}
+            };
+            if (ap.audio.readyState >= 1) {
+                applySeek();
+            } else {
+                ap.audio.addEventListener('loadedmetadata', applySeek, { once: true });
+            }
+        }
+
+        ap.on('play', function () {
+            if (chip) chip.hidden = true;
+            saveState();
+        });
+        ap.on('pause', saveState);
+        ap.on('ended', saveState);
+
+        setInterval(function () {
+            if (!ap.audio.paused) saveState();
+        }, 2000);
+        window.addEventListener('pagehide', saveState);
+
+        box.hidden = false;
+        launcher.hidden = true;
     }
 
-    // 浏览器通常会拦截无用户手势的自动播放，失败时提供手动续播入口
-    if (saved.playing && !window.matchMedia('(max-width: 768px)').matches) {
-        ap.play();
-        setTimeout(function() {
-            if (ap.audio.paused && chip) chip.hidden = false;
-        }, 800);
+    function loadPlayer() {
+        if (ap) return Promise.resolve(ap);
+        if (!loading) {
+            loading = true;
+
+            var css = document.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = '/vendor/aplayer/APlayer.min.css';
+            document.head.appendChild(css);
+
+            var js = document.createElement('script');
+            js.src = '/vendor/aplayer/APlayer.min.js';
+            js.onload = function () {
+                loading = false;
+                createPlayer();
+                waiters.splice(0).forEach(function (resolve) { resolve(ap); });
+            };
+            js.onerror = function () {
+                loading = false;
+                waiters = [];
+            };
+            document.head.appendChild(js);
+        }
+        return new Promise(function (resolve) { waiters.push(resolve); });
     }
 
-    ap.on('play', function() {
-        if (chip) chip.hidden = true;
-        saveState();
+    launcher.addEventListener('click', function () {
+        loadPlayer();
     });
-    ap.on('pause', saveState);
-    ap.on('ended', saveState);
 
     if (chip) {
-        chip.addEventListener('click', function() {
-            ap.play();
+        chip.addEventListener('click', function () {
+            chip.hidden = true;
+            loadPlayer().then(function (player) { player.play(); });
         });
     }
-
-    setInterval(function() {
-        if (!ap.audio.paused) saveState();
-    }, 2000);
-    window.addEventListener('pagehide', saveState);
-});
+})();
 </script>
 
 <!-- ========================================== -->
@@ -295,5 +389,19 @@ document.addEventListener("DOMContentLoaded", function() {
             input.blur();
         }
     });
+});
+</script>
+
+<!-- ========================================== -->
+<!-- 8. 「更多」下拉菜单收起 -->
+<!-- ========================================== -->
+<script>
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.menu-more')) return;
+    document.querySelectorAll('.menu-more details[open]').forEach(function (d) { d.open = false; });
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.menu-more details[open]').forEach(function (d) { d.open = false; });
 });
 </script>

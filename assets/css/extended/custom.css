@@ -51,6 +51,53 @@ body::before {
     transition: background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
+/* 2.1 「更多」下拉菜单 */
+.header { position: relative; z-index: 100; }
+.menu-wrap {
+    display: flex; align-items: center; justify-content: flex-end;
+    flex: 1 1 auto; min-width: 0; column-gap: var(--gap);
+}
+.menu-wrap .menu { flex: 0 1 auto; min-width: 0; }
+.menu-more { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+.menu-more details { position: relative; }
+.menu-more summary {
+    display: flex; align-items: center; gap: 4px; cursor: pointer; list-style: none;
+    font-size: 16px; line-height: var(--header-height); color: var(--primary);
+}
+.menu-more summary::-webkit-details-marker { display: none; }
+.menu-more summary.active {
+    font-weight: 500; text-decoration: underline;
+    text-underline-offset: 0.3rem; text-decoration-thickness: 2px;
+}
+.menu-more-caret { font-size: 10px; transition: transform 0.2s ease; }
+.menu-more details[open] .menu-more-caret { transform: rotate(180deg); }
+.menu-more-list {
+    position: absolute; top: calc(100% + 4px); right: 0; z-index: 1000;
+    min-width: 128px; margin: 0; padding: 6px; list-style: none;
+    background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(12px);
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+.menu-more-list a {
+    display: block; padding: 7px 12px; border-radius: 6px;
+    font-size: 15px; line-height: 1.4; white-space: nowrap;
+}
+.menu-more-list a:hover { background: rgba(0, 173, 181, 0.12); }
+.menu-more-list a.active {
+    font-weight: 500; text-decoration: underline;
+    text-underline-offset: 0.2rem; text-decoration-thickness: 2px;
+}
+html.dark .menu-more-list, html[data-theme="dark"] .menu-more-list {
+    background: rgba(30, 30, 30, 0.95); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+html.dark .menu-more-list a:hover, html[data-theme="dark"] .menu-more-list a:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+@media screen and (max-width: 430px) {
+    .menu { column-gap: 6px; }
+    .menu a { font-size: 15px; }
+    .menu-more summary { font-size: 15px; }
+}
+
 
 /* ========================================== */
 /* 3. 通用卡片样式 (首页、文章列表、关于、资源、留言板) */
@@ -237,9 +284,22 @@ html.dark .aplayer .aplayer-pic, html[data-theme="dark"] .aplayer .aplayer-pic {
     .home-info, .main .post-entry, .about-card, .resources-content, .custom-card { padding: 20px !important; }
 }
 
-/* 9. 音乐续播按钮 */
+/* 9. 音乐播放器入口与续播按钮 */
+#my-aplayer-box[hidden] { display: none !important; }
+
+#music-launcher {
+    position: fixed; bottom: 80px; right: 20px; z-index: 999999;
+    width: 48px; height: 48px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%;
+    background: linear-gradient(135deg, #12b7f5, #00adb5); color: #fff; font-size: 20px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 173, 181, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+#music-launcher:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 8px 22px rgba(0, 173, 181, 0.45); }
+#music-launcher[hidden] { display: none; }
+
 #resume-music {
-    position: fixed; bottom: 80px; right: 340px; z-index: 999999;
+    position: fixed; bottom: 86px; right: 80px; z-index: 999999;
     padding: 8px 14px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px;
     background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 13px; cursor: pointer;
     backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -249,6 +309,7 @@ html.dark .aplayer .aplayer-pic, html[data-theme="dark"] .aplayer .aplayer-pic {
 #resume-music[hidden] { display: none; }
 
 @media screen and (max-width: 768px) {
+    #music-launcher { display: none !important; }
     #resume-music { display: none !important; }
 }
 

@@ -1,9 +1,44 @@
-{{- /* 站点默认分享图：页面未指定封面时回退到头像 */ -}}
+{{- /* 站点默认分享图：优先用文章正文首图，没有图时回退到头像 */ -}}
 {{- if not (or .Params.cover.image .Params.images) }}
-<meta property="og:image" content="{{ "/photos/avatar.jpg" | absURL }}">
-<meta property="og:image:width" content="639">
-<meta property="og:image:height" content="640">
-<meta name="twitter:image" content="{{ "/photos/avatar.jpg" | absURL }}">
+{{- $ogImage := "" }}
+{{- $ogWidth := 0 }}
+{{- $ogHeight := 0 }}
+{{- if eq .Section "posts" }}
+  {{- $imgTags := findRE `<img[^>]+src="[^"]+"` .Content 1 }}
+  {{- with $imgTags }}
+    {{- $src := replaceRE `(?s)^.*?src="([^"]+)".*$` "$1" (index $imgTags 0) }}
+    {{- $res := false }}
+    {{- with $.Resources.GetMatch $src }}{{ $res = . }}{{ end }}
+    {{- if not $res }}
+      {{- with resources.Get (strings.TrimPrefix "/" $src) }}{{ $res = . }}{{ end }}
+    {{- end }}
+    {{- if $res }}
+      {{- $og := $res.Fill "1200x630 Center" }}
+      {{- $ogImage = $og.Permalink }}
+      {{- $ogWidth = $og.Width }}
+      {{- $ogHeight = $og.Height }}
+    {{- else if or (strings.HasPrefix $src "http://") (strings.HasPrefix $src "https://") }}
+      {{- $ogImage = $src }}
+    {{- else if strings.HasPrefix $src "/" }}
+      {{- $ogImage = $src | absURL }}
+    {{- else }}
+      {{- $ogImage = path.Join $.RelPermalink $src | absURL }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- if not $ogImage }}
+  {{- $ogImage = "/photos/avatar.jpg" | absURL }}
+  {{- $ogWidth = 639 }}
+  {{- $ogHeight = 640 }}
+{{- end }}
+<meta property="og:image" content="{{ $ogImage }}">
+{{- with $ogWidth }}
+<meta property="og:image:width" content="{{ . }}">
+{{- end }}
+{{- with $ogHeight }}
+<meta property="og:image:height" content="{{ . }}">
+{{- end }}
+<meta name="twitter:image" content="{{ $ogImage }}">
 {{- end }}
 <link rel="apple-touch-icon" href="{{ "/apple-touch-icon-180.png" | absURL }}">
 <link rel="manifest" href="/manifest.json">

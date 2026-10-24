@@ -26,7 +26,7 @@ git submodule update --remote themes/PaperMod
 git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 ```
 
-升级后请本地 `hugo server` 检查自定义样式（`assets/css/extended/custom.css`、`layouts/partials/extend_footer.html`、`layouts/partials/share_icons.html`、`layouts/_partials/home_info.html`）是否仍然生效。`home_info.html` 是主题同名模板的完整覆盖，主题更新后需要对比上游同步改动。
+升级后请本地 `hugo server` 检查自定义样式（`assets/css/extended/custom.css`、`layouts/partials/extend_footer.html`、`layouts/partials/share_icons.html`、`layouts/_partials/home_info.html`、`layouts/_partials/header.html`）是否仍然生效。`home_info.html` 和 `header.html` 是主题同名模板的完整覆盖，主题更新后需要对比上游同步改动。
 
 ## 目录速览
 
@@ -35,9 +35,10 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 | `hugo.toml` | 站点配置：菜单、SEO、Giscus 评论 |
 | `content/` | 页面与文章（`posts/` 为博客） |
 | `assets/css/extended/custom.css` | 全站自定义样式 |
-| `layouts/partials/extend_footer.html` | 时钟、访问量、打字机、进度条、灯箱、评论、播放器 |
-| `layouts/partials/extend_head.html` | 默认分享图、apple-touch-icon、PWA manifest、SW 注册 |
+| `layouts/partials/extend_footer.html` | 时钟、访问量、打字机、进度条、灯箱与播放器按需加载、评论、搜索快捷键 |
+| `layouts/partials/extend_head.html` | 文章分享图（正文首图裁 1200×630）、apple-touch-icon、PWA manifest、SW 注册 |
 | `layouts/_partials/home_info.html` | 首页介绍卡片覆盖，含 QQ 群入口（配置在 `[params.qqGroup]`） |
+| `layouts/_partials/header.html` | 导航栏覆盖，把归档/分类/标签收进「更多」下拉（菜单 `parent = "more"`） |
 | `layouts/partials/share_icons.html` | 微博 / QQ / 复制链接分享按钮 |
 | `static/vendor/` | 自托管的前端依赖（APlayer、Fancybox） |
 | `static/manifest.json`、`static/sw.js` | PWA 清单与 Service Worker |
@@ -58,16 +59,23 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 
 ## 背景音乐
 
-播放器状态（曲目、进度、音量、是否在播）存在 `localStorage` 的 `my-aplayer-state` 键里。站内跳转时会尝试自动续播；浏览器拦截自动播放时，右下角会出现「▶ 继续播放」按钮。
+播放器状态（曲目、进度、音量、是否在播）存在 `localStorage` 的 `my-aplayer-state` 键里。为避免每页首屏加载 70KB 播放器，右下角先显示圆形「♪」入口，点击后才注入 APlayer；若上次正在播放，入口旁会先出现「▶ 继续播放」，点击后加载并续播。
 
 - 属站点内跨页续播，不是全局悬浮播放：音频文件保存在 `/music/`，不经过 Service Worker 缓存。
 - 曲目列表在 `extend_footer.html` 第 6 节，改歌单直接改那里的 `audio` 数组。
+- 灯箱同理：鼠标悬停或首次点击图片时才加载 Fancybox。
 
 ## PWA
 
 `static/manifest.json` 提供安装信息，`static/sw.js` 负责离线缓存：导航请求走网络优先，静态资源走缓存优先。安装弹窗的截图是 `static/screenshot-wide.jpg`（1280×720）和 `static/screenshot-narrow.jpg`（720×1280），改版后重新截一张替换即可。
 
-**改完静态资源后请把 `sw.js` 里的 `CACHE` 版本号加一**（如 `whymoonbrid-v2` → `whymoonbrid-v3`），否则老访客会一直拿到旧缓存。
+**改完静态资源后请把 `sw.js` 里的 `CACHE` 版本号加一**（当前为 `whymoonbrid-v6`），否则老访客会一直拿到旧缓存。
+
+## 分享图
+
+文章页会自动取正文里的第一张图，裁成 1200×630 后写入 `og:image`；没有图片的文章和其他页面回退到 `/photos/avatar.jpg`。为此 `hugo.toml` 的 `[module]` 把 `static/photos` 同时挂载到 `assets/photos`，让静态目录里的图片也能进入 Hugo 图像处理管线。
+
+想指定分享图，可在文章 front matter 写 `images = ["/photos/xxx.png"]`（优先级更高，直接使用原图，不裁剪）。
 
 ## 资源约定
 
