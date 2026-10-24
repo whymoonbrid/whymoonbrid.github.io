@@ -35,11 +35,29 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 | `hugo.toml` | 站点配置：菜单、SEO、Giscus 评论 |
 | `content/` | 页面与文章（`posts/` 为博客） |
 | `assets/css/extended/custom.css` | 全站自定义样式 |
-| `layouts/partials/extend_footer.html` | 时钟、访问量、打字机、进度条、灯箱、Giscus、播放器 |
-| `layouts/partials/extend_head.html` | 默认分享图、apple-touch-icon |
+| `layouts/partials/extend_footer.html` | 时钟、访问量、打字机、进度条、灯箱、评论、播放器 |
+| `layouts/partials/extend_head.html` | 默认分享图、apple-touch-icon、PWA manifest、SW 注册 |
 | `layouts/partials/share_icons.html` | 微博 / QQ / 复制链接分享按钮 |
 | `static/vendor/` | 自托管的前端依赖（APlayer、Fancybox） |
+| `static/manifest.json`、`static/sw.js` | PWA 清单与 Service Worker |
 | `.pages.yml` | Pages CMS 配置，可在浏览器/手机上写文章 |
+
+## 评论
+
+评论使用 **Giscus**，配置在 `hugo.toml` 的 `[params.giscus]`，仓库与分类 ID 需与 GitHub 仓库的 Discussions 设置一致。文章页会自动插入评论区，留言板使用 `#guestbook-giscus` 容器；主题会跟随站点明暗模式切换。
+
+## 背景音乐
+
+播放器状态（曲目、进度、音量、是否在播）存在 `localStorage` 的 `my-aplayer-state` 键里。站内跳转时会尝试自动续播；浏览器拦截自动播放时，右下角会出现「▶ 继续播放」按钮。
+
+- 属站点内跨页续播，不是全局悬浮播放：音频文件保存在 `/music/`，不经过 Service Worker 缓存。
+- 曲目列表在 `extend_footer.html` 第 6 节，改歌单直接改那里的 `audio` 数组。
+
+## PWA
+
+`static/manifest.json` 提供安装信息，`static/sw.js` 负责离线缓存：导航请求走网络优先，静态资源走缓存优先。
+
+**改完静态资源后请把 `sw.js` 里的 `CACHE` 版本号加一**（如 `whymoonbrid-v1` → `whymoonbrid-v2`），否则老访客会一直拿到旧缓存。
 
 ## 资源约定
 

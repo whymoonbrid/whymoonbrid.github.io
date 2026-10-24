@@ -235,3 +235,18 @@ html.dark .aplayer .aplayer-pic, html[data-theme="dark"] .aplayer .aplayer-pic {
     .header-nav { width: calc(100% - 20px) !important; margin-top: 8px !important; border-radius: 10px !important; }
     .home-info, .main .post-entry, .about-card, .resources-content, .custom-card { padding: 20px !important; }
 }
+
+/* 9. 音乐续播按钮 */
+#resume-music {
+    position: fixed; bottom: 80px; right: 340px; z-index: 999999;
+    padding: 8px 14px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px;
+    background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 13px; cursor: pointer;
+    backdrop-filter: blur(8px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#resume-music:hover { transform: translateY(-2px); background: rgba(0, 0, 0, 0.8); }
+#resume-music[hidden] { display: none; }
+
+@media screen and (max-width: 768px) {
+    #resume-music { display: none !important; }
+}

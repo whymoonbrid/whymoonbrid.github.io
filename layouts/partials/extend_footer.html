@@ -90,17 +90,36 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <!-- ========================================== -->
-<!-- 5. Giscus 评论区 -->
+<!-- 5. 评论区（Giscus） -->
 <!-- ========================================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const giscusRepo = "whymoonbrid/whymoonbrid.github.io";
-    const giscusRepoId = "R_kgDOVTyFwQ";
-    const giscusCategory = "General";
-    const giscusCategoryId = "DIC_kwDOVTyFwC4DJW4H";
+    const giscusRepo = "{{ site.Params.giscus.repo }}";
+    const giscusRepoId = "{{ site.Params.giscus.repoId }}";
+    const giscusCategory = "{{ site.Params.giscus.category }}";
+    const giscusCategoryId = "{{ site.Params.giscus.categoryId }}";
 
     function isDarkMode() {
         return document.documentElement.classList.contains('dark') || document.documentElement.getAttribute('data-theme') === 'dark';
+    }
+
+    function getContainer() {
+        if (window.location.pathname.includes('/posts/')) {
+            var footer = document.querySelector('footer');
+            if (!footer) return null;
+            var el = document.getElementById('my-custom-giscus');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'my-custom-giscus';
+                el.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: background-color 0.3s;";
+                footer.parentNode.insertBefore(el, footer);
+            }
+            return el;
+        }
+        if (window.location.pathname.includes('/guestbook/')) {
+            return document.getElementById('guestbook-giscus');
+        }
+        return null;
     }
 
     function sendThemeToGiscus(iframe) {
@@ -109,55 +128,36 @@ document.addEventListener("DOMContentLoaded", function() {
         iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, 'https://giscus.app');
     }
 
-    function injectGiscus() {
-        let container = null;
-        if (window.location.pathname.includes('/posts/')) {
-            var footer = document.querySelector('footer');
-            if (footer && !document.getElementById('my-custom-giscus')) {
-                container = document.createElement('div');
-                container.id = 'my-custom-giscus';
-                container.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: background-color 0.3s;";
-                footer.parentNode.insertBefore(container, footer);
-            } else {
-                container = document.getElementById('my-custom-giscus');
-            }
-        } else if (window.location.pathname.includes('/guestbook/')) {
-            container = document.getElementById('guestbook-giscus');
-        }
-
-        if (!container) return;
-
-        if (!container.hasChildNodes()) {
-            container.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
-            var script = document.createElement('script');
-            script.src = "https://giscus.app/client.js";
-            script.setAttribute("data-repo", giscusRepo);
-            script.setAttribute("data-repo-id", giscusRepoId);
-            script.setAttribute("data-category", giscusCategory);
-            script.setAttribute("data-category-id", giscusCategoryId);
-            script.setAttribute("data-mapping", "pathname");
-            script.setAttribute("data-strict", "0");
-            script.setAttribute("data-reactions-enabled", "1");
-            script.setAttribute("data-emit-metadata", "0");
-            script.setAttribute("data-input-position", "bottom");
-            script.setAttribute("data-theme", isDarkMode() ? "dark_dimmed" : "light");
-            script.setAttribute("data-lang", "zh-CN");
-            script.setAttribute("crossorigin", "anonymous");
-            script.async = true;
-            container.appendChild(script);
-        }
+    function injectGiscus(container) {
+        if (container.dataset.comments === 'giscus') return;
+        container.dataset.comments = 'giscus';
+        container.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
+        var script = document.createElement('script');
+        script.src = "https://giscus.app/client.js";
+        script.setAttribute("data-repo", giscusRepo);
+        script.setAttribute("data-repo-id", giscusRepoId);
+        script.setAttribute("data-category", giscusCategory);
+        script.setAttribute("data-category-id", giscusCategoryId);
+        script.setAttribute("data-mapping", "pathname");
+        script.setAttribute("data-strict", "0");
+        script.setAttribute("data-reactions-enabled", "1");
+        script.setAttribute("data-emit-metadata", "0");
+        script.setAttribute("data-input-position", "bottom");
+        script.setAttribute("data-theme", isDarkMode() ? "dark_dimmed" : "light");
+        script.setAttribute("data-lang", "zh-CN");
+        script.setAttribute("crossorigin", "anonymous");
+        script.async = true;
+        container.appendChild(script);
     }
 
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme') {
-                var giscusDiv = document.getElementById('my-custom-giscus') || document.getElementById('guestbook-giscus');
-                if (giscusDiv) {
-                    giscusDiv.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
-                }
-                document.querySelectorAll('iframe.giscus-frame').forEach(sendThemeToGiscus);
-            }
-        });
+    var container = getContainer();
+    if (!container) return;
+
+    injectGiscus(container);
+
+    const observer = new MutationObserver(() => {
+        container.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
+        document.querySelectorAll('iframe.giscus-frame').forEach(sendThemeToGiscus);
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
 
@@ -169,8 +169,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     });
-
-    injectGiscus();
 });
 </script>
 
@@ -183,10 +181,19 @@ document.addEventListener("DOMContentLoaded", function() {
 <div id="my-aplayer-box" style="position: fixed; bottom: 80px; right: 20px; z-index: 999999; width: 300px; max-width: calc(100vw - 40px);">
     <div id="aplayer"></div>
 </div>
+<button id="resume-music" type="button" hidden>▶ 继续播放</button>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // 不用在 JS 里写封面了，交由 CSS 的 .aplayer-pic 动态接管日夜封面
+    // 继续播放按钮的位置与样式在 custom.css 中定义
+    var STORAGE_KEY = 'my-aplayer-state';
+    var saved = {};
+    try {
+        saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {};
+    } catch (e) {
+        saved = {};
+    }
+
     const ap = new APlayer({
         container: document.getElementById('aplayer'),
         autoplay: false,
@@ -201,5 +208,62 @@ document.addEventListener("DOMContentLoaded", function() {
             { name: 'Welcome To Va-11 Hall-A', artist: 'Garoad', url: '/music/Garoad - Welcome To Va-11 Hall-A.mp3' }
         ]
     });
+
+    var chip = document.getElementById('resume-music');
+
+    function saveState() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                index: ap.list.index,
+                time: ap.audio.currentTime || 0,
+                volume: ap.audio.volume,
+                playing: !ap.audio.paused && !ap.audio.ended
+            }));
+        } catch (e) {}
+    }
+
+    if (Number.isInteger(saved.index) && ap.list.audios[saved.index]) {
+        ap.list.switch(saved.index);
+    }
+    if (typeof saved.volume === 'number') {
+        ap.volume(saved.volume, true);
+    }
+    if (typeof saved.time === 'number' && saved.time > 1) {
+        var resumeTime = saved.time;
+        var applySeek = function() {
+            try { ap.audio.currentTime = resumeTime; } catch (e) {}
+        };
+        if (ap.audio.readyState >= 1) {
+            applySeek();
+        } else {
+            ap.audio.addEventListener('loadedmetadata', applySeek, { once: true });
+        }
+    }
+
+    // 浏览器通常会拦截无用户手势的自动播放，失败时提供手动续播入口
+    if (saved.playing && !window.matchMedia('(max-width: 768px)').matches) {
+        ap.play();
+        setTimeout(function() {
+            if (ap.audio.paused && chip) chip.hidden = false;
+        }, 800);
+    }
+
+    ap.on('play', function() {
+        if (chip) chip.hidden = true;
+        saveState();
+    });
+    ap.on('pause', saveState);
+    ap.on('ended', saveState);
+
+    if (chip) {
+        chip.addEventListener('click', function() {
+            ap.play();
+        });
+    }
+
+    setInterval(function() {
+        if (!ap.audio.paused) saveState();
+    }, 2000);
+    window.addEventListener('pagehide', saveState);
 });
 </script>

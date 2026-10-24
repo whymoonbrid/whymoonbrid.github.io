@@ -6,3 +6,15 @@
 <meta name="twitter:image" content="{{ "/photos/avatar.jpg" | absURL }}">
 {{- end }}
 <link rel="apple-touch-icon" href="{{ "/apple-touch-icon-180.png" | absURL }}">
+<link rel="manifest" href="{{ "/manifest.json" | absURL }}">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a2e" media="(prefers-color-scheme: dark)">
+{{- if hugo.IsProduction }}
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+</script>
+{{- end }}
