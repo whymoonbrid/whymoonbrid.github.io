@@ -267,3 +267,33 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener('pagehide', saveState);
 });
 </script>
+
+<!-- ========================================== -->
+<!-- 7. 搜索页快捷键 -->
+<!-- ========================================== -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var input = document.getElementById('searchInput');
+    if (!input) return;
+
+    document.addEventListener('keydown', function(e) {
+        var t = e.target;
+        var typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable);
+        if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            e.preventDefault();
+            if (!input.disabled) {
+                input.focus();
+                input.select();
+            }
+        }
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            input.value = '';
+            input.dispatchEvent(new Event('input'));
+            input.blur();
+        }
+    });
+});
+</script>

@@ -40,11 +40,20 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 | `layouts/partials/share_icons.html` | 微博 / QQ / 复制链接分享按钮 |
 | `static/vendor/` | 自托管的前端依赖（APlayer、Fancybox） |
 | `static/manifest.json`、`static/sw.js` | PWA 清单与 Service Worker |
+| `content/friends.md`、`content/projects.md` | 友链页与项目页，卡片直接写在 markdown 里 |
 | `.pages.yml` | Pages CMS 配置，可在浏览器/手机上写文章 |
 
 ## 评论
 
 评论使用 **Giscus**，配置在 `hugo.toml` 的 `[params.giscus]`，仓库与分类 ID 需与 GitHub 仓库的 Discussions 设置一致。文章页会自动插入评论区，留言板使用 `#guestbook-giscus` 容器；主题会跟随站点明暗模式切换。
+
+## 友链与项目
+
+两个页面都是普通 markdown 加内联 HTML 卡片，新增条目直接复制文件里的卡片结构即可。友链申请入口指向留言板和邮箱，不需要额外的数据文件。
+
+## 搜索
+
+搜索页支持 `/` 聚焦搜索框、`Esc` 清空，快捷键脚本在 `extend_footer.html` 第 7 节。
 
 ## 背景音乐
 
@@ -55,9 +64,9 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 
 ## PWA
 
-`static/manifest.json` 提供安装信息，`static/sw.js` 负责离线缓存：导航请求走网络优先，静态资源走缓存优先。
+`static/manifest.json` 提供安装信息，`static/sw.js` 负责离线缓存：导航请求走网络优先，静态资源走缓存优先。安装弹窗的截图是 `static/screenshot-wide.jpg`（1280×720）和 `static/screenshot-narrow.jpg`（720×1280），改版后重新截一张替换即可。
 
-**改完静态资源后请把 `sw.js` 里的 `CACHE` 版本号加一**（如 `whymoonbrid-v1` → `whymoonbrid-v2`），否则老访客会一直拿到旧缓存。
+**改完静态资源后请把 `sw.js` 里的 `CACHE` 版本号加一**（如 `whymoonbrid-v2` → `whymoonbrid-v3`），否则老访客会一直拿到旧缓存。
 
 ## 资源约定
 
