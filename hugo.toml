@@ -30,6 +30,11 @@ enableRobotsTXT = true
     Title = "Hi there!"
     Content = "日常分享用，总之什么都会抛过来一点"
 
+[params.qqGroup]
+    link = "https://qm.qq.com/q/Fswr0T0PKw"
+    title = "加入 QQ 群"
+    subtitle = "世界上最大众的群聊"
+
 # ========================================== #
 # 导航菜单 (已去重，按权重排序)
 # ========================================== #

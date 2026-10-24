@@ -26,7 +26,7 @@ git submodule update --remote themes/PaperMod
 git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 ```
 
-升级后请本地 `hugo server` 检查自定义样式（`assets/css/extended/custom.css`、`layouts/partials/extend_footer.html`、`layouts/partials/share_icons.html`）是否仍然生效。
+升级后请本地 `hugo server` 检查自定义样式（`assets/css/extended/custom.css`、`layouts/partials/extend_footer.html`、`layouts/partials/share_icons.html`、`layouts/_partials/home_info.html`）是否仍然生效。`home_info.html` 是主题同名模板的完整覆盖，主题更新后需要对比上游同步改动。
 
 ## 目录速览
 
@@ -37,6 +37,7 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 | `assets/css/extended/custom.css` | 全站自定义样式 |
 | `layouts/partials/extend_footer.html` | 时钟、访问量、打字机、进度条、灯箱、评论、播放器 |
 | `layouts/partials/extend_head.html` | 默认分享图、apple-touch-icon、PWA manifest、SW 注册 |
+| `layouts/_partials/home_info.html` | 首页介绍卡片覆盖，含 QQ 群入口（配置在 `[params.qqGroup]`） |
 | `layouts/partials/share_icons.html` | 微博 / QQ / 复制链接分享按钮 |
 | `static/vendor/` | 自托管的前端依赖（APlayer、Fancybox） |
 | `static/manifest.json`、`static/sw.js` | PWA 清单与 Service Worker |
