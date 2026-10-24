@@ -1,7 +1,10 @@
 baseURL = "https://whymoonbrid.github.io/"
-locale = "zh-cn"
 title = "my life"
 theme = "PaperMod"
+
+locale = "zh-cn"
+defaultContentLanguage = "zh"
+enableRobotsTXT = true
 
 [outputs]
     home = ["HTML", "RSS", "JSON"]
@@ -18,6 +21,11 @@ theme = "PaperMod"
     ShowSearch = true
     ShowComments = true
 
+    description = "whymoonbrid 的个人站点：日常随笔、资源分享与生活记录。"
+    keywords = ["whymoonbrid", "个人博客", "Hugo", "随笔", "资源分享"]
+    author = "whymoonbrid"
+    ShareButtons = ["weibo", "qq", "copy"]
+
 [params.homeInfoParams]
     Title = "Hi there!"
     Content = "日常分享用，总之什么都会抛过来一点"
@@ -33,9 +41,15 @@ theme = "PaperMod"
 
 [[menu.main]]
     identifier = "archives"
-    name = "归档"
+    name = "文章"
     url = "/posts/"
     weight = 10
+
+[[menu.main]]
+    identifier = "archive-timeline"
+    name = "归档"
+    url = "/archives/"
+    weight = 12
 
 [[menu.main]]
     identifier = "guestbook"

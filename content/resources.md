@@ -27,9 +27,8 @@ ShowToc = false
 ## 📸 照片分享
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
-    <!-- 建议：为了加载速度，你可以把原图压缩成宽度 400px 的小图作为展示 -->
     <img src="/photos/pixel-art.png" data-fancybox="gallery" alt="像素操操操" loading="lazy" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;">
-    <img src="/photos/roseshun.png" data-fancybox="gallery" alt="玫瑰顺飞" loading="lazy" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;">
+    <img src="/photos/roseshun.webp" data-fancybox="gallery" alt="玫瑰顺飞" loading="lazy" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;">
 </div>
 
 </div>

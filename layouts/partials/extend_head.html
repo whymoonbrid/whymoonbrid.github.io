@@ -1,0 +1,8 @@
+{{- /* 站点默认分享图：页面未指定封面时回退到头像 */ -}}
+{{- if not (or .Params.cover.image .Params.images) }}
+<meta property="og:image" content="{{ "/photos/avatar.jpg" | absURL }}">
+<meta property="og:image:width" content="639">
+<meta property="og:image:height" content="640">
+<meta name="twitter:image" content="{{ "/photos/avatar.jpg" | absURL }}">
+{{- end }}
+<link rel="apple-touch-icon" href="{{ "/apple-touch-icon-180.png" | absURL }}">
