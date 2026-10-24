@@ -1,0 +1,84 @@
+{{- with .cxt}} {{/* Apply proper context from dict */}}
+{{- $page := . }}
+{{- if (and .Params.cover.image (not $.isHidden)) }}
+<figure class="entry-cover">
+    {{- $loading := cond $.IsSingle "eager" "lazy" }}
+    {{- $addLink := (and site.Params.cover.linkFullImages $.IsSingle) }}
+    {{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) }}
+    {{- $alt := (.Params.cover.alt | default .Params.cover.caption | plainify) }}
+    {{- $responsiveImages := (.Params.cover.responsiveImages | default site.Params.cover.responsiveImages) | default true }}
+
+    {{- $pageBundleCover := (.Resources.ByType "image").GetMatch (printf "*%s*" (.Params.cover.image)) }}
+    {{- $globalResourcesCover := (resources.ByType "image").GetMatch (printf "*%s*" (.Params.cover.image)) }}
+    {{- $cover := (or $pageBundleCover $globalResourcesCover)}}
+    {{- /* We are not using the .Param.cover.relative to decide the location of image */}}
+    {{- /* If we have the image in pageBundle or globalResources we can process the image */}}
+
+    {{- $sizes := (slice "360" "480" "720" "1080" "1500") }}
+    {{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif" "webp") -}}
+
+    {{- $imgdl := (.Params.cover.image) | absURL }}
+    {{- if $cover -}}
+        {{- $imgdl = $cover.Permalink }}
+    {{- end -}}
+
+    {{- if $addLink }}
+        <a href="{{ $imgdl }}" target="_blank" rel="noopener noreferrer">
+    {{- end }}
+
+    {{- if $cover -}}
+        {{/* i.e it is present in page bundle */}}
+        {{- if (and (in $processableFormats $cover.MediaType.SubType) ($responsiveImages) (eq $prod true)) }}
+            <img loading="{{$loading}}"
+                srcset='{{- range $size := $sizes -}}
+                            {{- if (ge $cover.Width $size) }}
+                                {{- printf "%s %s" (($cover.Resize (printf "%sx" $size)).Permalink) (printf "%sw," $size) }}
+                            {{- end }}
+                        {{- end }}
+                        {{- printf "%s %dw" ($cover.Permalink) ($cover.Width) }}'
+                src="{{ $cover.Permalink }}"
+                sizes="(min-width: 768px) 720px, 100vw"
+                width="{{ $cover.Width }}" height="{{ $cover.Height }}"
+                alt="{{ $alt }}">
+        {{- else }}{{/* Unprocessable image or responsive images disabled */}}
+            <img loading="{{ $loading }}" src="{{ $imgdl }}" alt="{{ $alt }}">
+        {{- end }}
+    {{- else }}
+        {{- /* For absolute urls and external links, no img processing here */}}
+        <img loading="{{ $loading }}" src="{{ $imgdl }}" alt="{{ $alt }}">
+    {{- end }}
+
+    {{- if $addLink }}
+        </a>
+    {{- end -}}
+
+    {{- /*  Display Caption  */ -}}
+    {{- if $.IsSingle }}
+        {{ with .Params.cover.caption -}}
+            <figcaption>{{ . | markdownify }}</figcaption>
+        {{- end }}
+    {{- end }}
+</figure>
+{{- else if and (not $.IsSingle) (not $.isHidden) }}
+{{- /* 未设置封面时，列表缩略图自动取正文第一张图 */ -}}
+{{- $src := "" }}
+{{- with .Params.images }}
+    {{- $src = index . 0 }}
+{{- end }}
+{{- if not $src }}
+    {{- $imgTags := findRE `<img[^>]+src="[^"]+"` .Content 1 }}
+    {{- with $imgTags }}
+        {{- $src = replaceRE `(?s)^.*?src="([^"]+)".*$` "$1" (index $imgTags 0) }}
+    {{- end }}
+{{- end }}
+{{- with $src }}
+    {{- $url := . }}
+    {{- if not (or (strings.HasPrefix . "http://") (strings.HasPrefix . "https://")) }}
+        {{- $url = cond (strings.HasPrefix . "/") (. | absURL) (path.Join $page.RelPermalink . | absURL) }}
+    {{- end }}
+<figure class="entry-cover entry-cover--auto">
+    <img loading="lazy" src="{{ $url }}" alt="{{ $page.Title | plainify }}">
+</figure>
+{{- end }}
+{{- end }}{{/* End image */}}
+{{- end -}}{{/* End context */ -}}

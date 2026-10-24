@@ -26,7 +26,7 @@ git submodule update --remote themes/PaperMod
 git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 ```
 
-升级后请本地 `hugo server` 检查自定义样式（`assets/css/extended/custom.css`、`layouts/partials/extend_footer.html`、`layouts/partials/share_icons.html`、`layouts/_partials/home_info.html`、`layouts/_partials/header.html`）是否仍然生效。`home_info.html` 和 `header.html` 是主题同名模板的完整覆盖，主题更新后需要对比上游同步改动。
+升级后请本地 `hugo server` 检查自定义样式（`assets/css/extended/custom.css`、`layouts/partials/extend_footer.html`、`layouts/partials/share_icons.html`、`layouts/_partials/home_info.html`、`layouts/_partials/header.html`、`layouts/_partials/cover.html`）是否仍然生效。`home_info.html`、`header.html`、`cover.html` 是主题同名模板的完整覆盖，主题更新后需要对比上游同步改动。
 
 ## 目录速览
 
@@ -39,6 +39,7 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 | `layouts/partials/extend_head.html` | 文章分享图（正文首图裁 1200×630）、apple-touch-icon、PWA manifest、SW 注册 |
 | `layouts/_partials/home_info.html` | 首页介绍卡片覆盖，含 QQ 群入口（配置在 `[params.qqGroup]`） |
 | `layouts/_partials/header.html` | 导航栏覆盖，把归档/分类/标签收进「更多」下拉（菜单 `parent = "more"`） |
+| `layouts/_partials/cover.html` | 封面模板覆盖：未设置 `cover.image` 时，列表缩略图自动取正文首图 |
 | `layouts/partials/share_icons.html` | 微博 / QQ / 复制链接分享按钮 |
 | `static/vendor/` | 自托管的前端依赖（APlayer、Fancybox） |
 | `static/manifest.json`、`static/sw.js` | PWA 清单与 Service Worker |
@@ -69,13 +70,13 @@ git add themes/PaperMod && git commit -m "chore: bump PaperMod"
 
 `static/manifest.json` 提供安装信息，`static/sw.js` 负责离线缓存：导航请求走网络优先，静态资源走缓存优先。安装弹窗的截图是 `static/screenshot-wide.jpg`（1280×720）和 `static/screenshot-narrow.jpg`（720×1280），改版后重新截一张替换即可。
 
-**改完静态资源后请把 `sw.js` 里的 `CACHE` 版本号加一**（当前为 `whymoonbrid-v6`），否则老访客会一直拿到旧缓存。
+**改完静态资源后请把 `sw.js` 里的 `CACHE` 版本号加一**（当前为 `whymoonbrid-v7`），否则老访客会一直拿到旧缓存。
 
 ## 分享图
 
-文章页会自动取正文里的第一张图，裁成 1200×630 后写入 `og:image`；没有图片的文章和其他页面回退到 `/photos/avatar.jpg`。为此 `hugo.toml` 的 `[module]` 把 `static/photos` 同时挂载到 `assets/photos`，让静态目录里的图片也能进入 Hugo 图像处理管线。
+文章页会自动取正文里的第一张图，裁成 1200×630 后写入 `og:image`；没有图片的文章和其他页面回退到 `/photos/avatar.jpg`。列表页的缩略图也取同一张图（文章没设置 `cover.image` 时自动补上），统一裁成横幅展示。为此 `hugo.toml` 的 `[module]` 把 `static/photos` 同时挂载到 `assets/photos`，让静态目录里的图片也能进入 Hugo 图像处理管线。
 
-想指定分享图，可在文章 front matter 写 `images = ["/photos/xxx.png"]`（优先级更高，直接使用原图，不裁剪）。
+想手动指定：写 `cover.image` 会同时作为列表封面、正文封面和分享图（使用原图）；写 `images = ["/photos/xxx.png"]` 则列表缩略图和分享图都用它，同样不裁剪。
 
 ## 资源约定
 

@@ -51,8 +51,7 @@ body::before {
     transition: background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* 2.1 「更多」下拉菜单 */
-.header { position: relative; z-index: 100; }
+/* 2.1 「更多」下拉菜单 */.header { position: relative; z-index: 100; }
 .menu-wrap {
     display: flex; align-items: center; justify-content: flex-end;
     flex: 1 1 auto; min-width: 0; column-gap: var(--gap);
@@ -96,6 +95,17 @@ html.dark .menu-more-list a:hover, html[data-theme="dark"] .menu-more-list a:hov
     .menu { column-gap: 6px; }
     .menu a { font-size: 15px; }
     .menu-more summary { font-size: 15px; }
+}
+
+/* 2.2 文章列表缩略图（未设置封面时自动取正文首图） */
+.entry-cover--auto img {
+    width: 100%; height: 220px; object-fit: cover; object-position: center 30%;
+    border-radius: var(--radius);
+}
+.first-entry .entry-cover--auto img { height: 260px; }
+@media screen and (max-width: 768px) {
+    .entry-cover--auto img { height: 170px; }
+    .first-entry .entry-cover--auto img { height: 190px; }
 }
 
 
