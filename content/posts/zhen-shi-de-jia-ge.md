@@ -1,7 +1,7 @@
 ---
 title: "「真实」正在变得前所未有的昂贵且廉价（转载）"
 date: 2026-10-25
-draft: true
+draft: false
 tags: ["转载", "随笔", "AI", "互联网"]
 description: "当内容里没有人，交流就结束了。转载一支 B 站视频的文字版。"
 images: ["/photos/67-restaurant.webp"]
