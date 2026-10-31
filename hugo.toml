@@ -99,9 +99,10 @@ enableRobotsTXT = true
 
 [[menu.main]]
     identifier = "resources"
-    name = "资源"
+    name = "图像文档"
     url = "/resources/"
-    weight = 40
+    parent = "more"
+    weight = 4
 
 [[menu.main]]
     identifier = "friends"

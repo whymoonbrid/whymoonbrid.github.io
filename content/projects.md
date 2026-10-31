@@ -23,7 +23,7 @@ hideMeta = true
         <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">STM32</span></div>
     </a>
     <a class="project-card" href="/resources/">
-        <h3>资源分享</h3>
+        <h3>图像文档</h3>
         <p>照片与文档的整理页，持续更新。</p>
         <div class="project-tags"><span class="project-tag">资源</span></div>
     </a>

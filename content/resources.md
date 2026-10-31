@@ -1,5 +1,5 @@
 +++
-title = "资源分享"
+title = "图像文档"
 date = 2024-05-01T10:00:00+08:00
 draft = false
 ShowToc = false
