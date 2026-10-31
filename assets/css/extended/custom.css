@@ -92,9 +92,16 @@ html.dark .menu-more-list a:hover, html[data-theme="dark"] .menu-more-list a:hov
     background: rgba(255, 255, 255, 0.08);
 }
 @media screen and (max-width: 430px) {
-    .menu { column-gap: 6px; }
+    .menu { column-gap: 4px; }
     .menu a { font-size: 15px; }
     .menu-more summary { font-size: 15px; }
+    /* 窄屏只留搜索图标，避免导航横向溢出 */
+    .menu a[href*="/search/"] span { font-size: 0; }
+    .menu a[href*="/search/"] span::before { content: "🔍"; font-size: 15px; }
+}
+
+@media screen and (max-width: 380px) {
+    .menu a, .menu-more summary { font-size: 14px; }
 }
 
 /* 2.2 文章列表缩略图（未设置封面时自动取正文首图） */
