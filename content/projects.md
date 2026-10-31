@@ -17,6 +17,11 @@ hideMeta = true
         <p>你正在看的这个站点：Hugo + PaperMod，前端依赖自托管，带 PWA 与跨页背景音乐。</p>
         <div class="project-tags"><span class="project-tag">Hugo</span><span class="project-tag">PaperMod</span></div>
     </a>
+    <a class="project-card" href="/tech/">
+        <h3>技术仓库</h3>
+        <p>C 语言和 STM32 的代码仓库入口，按分类整理。</p>
+        <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">STM32</span></div>
+    </a>
     <a class="project-card" href="/resources/">
         <h3>资源分享</h3>
         <p>照片与文档的整理页，持续更新。</p>

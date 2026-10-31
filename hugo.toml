@@ -66,6 +66,12 @@ enableRobotsTXT = true
     weight = 15
 
 [[menu.main]]
+    identifier = "tech"
+    name = "技术仓库"
+    url = "/tech/"
+    weight = 20
+
+[[menu.main]]
     identifier = "more"
     name = "更多"
     weight = 35
