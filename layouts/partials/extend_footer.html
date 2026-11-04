@@ -173,10 +173,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 el.style.cssText = "margin: 40px auto !important; width: 100% !important; max-width: 700px !important; padding: 20px; backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: background-color 0.3s;";
                 footer.parentNode.insertBefore(el, footer);
             }
+            el.style.display = 'none';
             return el;
         }
         if (window.location.pathname.includes('/guestbook/')) {
-            return document.getElementById('guestbook-giscus');
+            var gb = document.getElementById('guestbook-giscus');
+            if (gb) gb.style.display = 'none';
+            return gb;
         }
         return null;
     }
@@ -212,7 +215,39 @@ document.addEventListener("DOMContentLoaded", function() {
     var container = getContainer();
     if (!container) return;
 
-    injectGiscus(container);
+    // 延迟注入：滚到接近评论区时才加载 Giscus。
+    // Giscus 是指向 giscus.app 的跨域 iframe，且高度靠 postMessage 动态撑开。部分 App 内置浏览器
+    // （如 QQ）遇到页面里的第三方跨域 iframe，会把它"提拉"成独立窗口，并在 iframe 插入/撑高时
+    // 把父页面强制滚动到评论区——一打开文章就被拽到底部，观感很差。
+    // 延后加载后首屏没有 iframe，既不会被提拉、也不会跳走，还省下首屏对 GitHub API 的请求。
+    var sentinel = document.createElement('div');
+    sentinel.id = 'giscus-sentinel';
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.cssText = 'margin: 30px auto; width: 100%; max-width: 700px; text-align: center; color: #888; font-size: 13px;';
+    sentinel.textContent = '评论区加载中…';
+    container.parentNode.insertBefore(sentinel, container);
+
+    function loadGiscus() {
+        if (container.dataset.comments === 'giscus') return;
+        container.style.display = '';
+        injectGiscus(container);
+        if (sentinel.parentNode) sentinel.parentNode.removeChild(sentinel);
+    }
+
+    if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) {
+                    io.disconnect();
+                    loadGiscus();
+                    return;
+                }
+            }
+        }, { rootMargin: '800px 0px' });
+        io.observe(sentinel);
+    } else {
+        loadGiscus();
+    }
 
     const observer = new MutationObserver(() => {
         container.style.backgroundColor = isDarkMode() ? "rgba(30, 30, 30, 0.7)" : "rgba(255, 255, 255, 0.7)";
