@@ -572,3 +572,5 @@ Urs Schreiber 的 **《Differential cohomology in a cohesive (∞,1)-topos》(dc
 </div>
 
 > 这三份文献也可在本站的[图像文档页](/resources/)一并查看。
+
+<p class="note">封面图为 Pexels 上的博罗梅奥三环雕塑 3D 渲染（作者 Steve，源自照片 28844046），Pexels 许可可免费商用、无需署名；此处仍作标注以便追溯。</p>
