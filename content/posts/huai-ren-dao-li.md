@@ -93,3 +93,4 @@ images: ["/photos/huai-ren-dao-li-cover.jpg"]
 <p class="poem-hrl-line poem-hrl-cadence"><span>北徂路遥孰与俱</span></p>
 </div>
 </div>
+<p class="poem-hrl-source" id="source"><a href="https://www.bilibili.com/video/BV1MtN761E9w/" target="_blank" rel="noopener noreferrer">【诗岸】广陵散绝那天，向秀的余生开始了｜《怀人道李》</a></p>

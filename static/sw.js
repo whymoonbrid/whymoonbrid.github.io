@@ -1,5 +1,5 @@
 /* 修改本站资源后请同步修改 CACHE 版本号，以触发旧缓存清理 */
-const CACHE = 'whymoonbrid-v10';
+const CACHE = 'whymoonbrid-v11';
 const PRECACHE = [
   '/',
   '/manifest.json',

@@ -619,10 +619,23 @@ html[data-theme="dark"] .post-content h3.tech-cat { border-left-color: #4dd0d6; 
     text-indent: .48em;
     opacity: .62;
 }
+.post-content .poem-hrl-source {
+    max-width: 640px;
+    margin: 3.6em auto 1.5em;
+    text-align: center;
+    font-size: .86rem;
+    letter-spacing: .04em;
+    opacity: .68;
+}
+.post-content .poem-hrl-source a {
+    text-decoration: underline;
+    text-underline-offset: .35em;
+}
 @media screen and (max-width: 600px) {
     .post-content .poem-hrl { font-size: 1rem; letter-spacing: .08em; line-height: 2.05; }
     .post-content .poem-hrl .poem-hrl-line span + span { margin-left: 1.1em; }
     .post-content .poem-hrl-stanza { margin-bottom: 2.5em; }
     .post-content .poem-hrl .poem-hrl-short { letter-spacing: .2em; text-indent: .2em; }
     .post-content .poem-hrl .poem-hrl-cadence { letter-spacing: .3em; text-indent: .3em; }
+    .post-content .poem-hrl-source { margin-top: 3em; font-size: .8rem; }
 }
