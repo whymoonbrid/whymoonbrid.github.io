@@ -585,3 +585,44 @@ html[data-theme="dark"] .post-content figcaption { color: #9a9a9a; }
 
 html.dark .post-content h3.tech-cat,
 html[data-theme="dark"] .post-content h3.tech-cat { border-left-color: #4dd0d6; }
+
+/* ========================================== */
+/* 16. 《怀人道李》诗页排版（杂言歌行，留白分章） */
+/* ========================================== */
+.post-content .poem-hrl {
+    max-width: 640px;
+    margin: 2.6em auto 1.5em;
+    font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    font-size: 1.14rem;
+    line-height: 2.25;
+    letter-spacing: .16em;
+    text-align: center;
+    color: inherit;
+}
+.post-content .poem-hrl-stanza { margin: 0 0 3.1em; }
+.post-content .poem-hrl-stanza:last-child { margin-bottom: 0; }
+.post-content .poem-hrl .poem-hrl-line {
+    margin: 0;
+    line-height: inherit;
+    text-align: center;
+}
+.post-content .poem-hrl .poem-hrl-line span { display: inline-block; }
+.post-content .poem-hrl .poem-hrl-line span + span { margin-left: 1.6em; }
+.post-content .poem-hrl .poem-hrl-short {
+    letter-spacing: .34em;
+    text-indent: .34em;
+    opacity: .78;
+}
+.post-content .poem-hrl .poem-hrl-cadence {
+    margin-top: .95em;
+    letter-spacing: .48em;
+    text-indent: .48em;
+    opacity: .62;
+}
+@media screen and (max-width: 600px) {
+    .post-content .poem-hrl { font-size: 1rem; letter-spacing: .08em; line-height: 2.05; }
+    .post-content .poem-hrl .poem-hrl-line span + span { margin-left: 1.1em; }
+    .post-content .poem-hrl-stanza { margin-bottom: 2.5em; }
+    .post-content .poem-hrl .poem-hrl-short { letter-spacing: .2em; text-indent: .2em; }
+    .post-content .poem-hrl .poem-hrl-cadence { letter-spacing: .3em; text-indent: .3em; }
+}
